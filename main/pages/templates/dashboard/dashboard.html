@@ -1,0 +1,89 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Dashboard - SnackRanger{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Admin Dashboard</h1>
+    <p class="lead mb-0">Welcome back, {{ request.user.first_name|default:"Admin" }}</p>
+</div>
+
+<!-- Quick Stats -->
+<div class="row text-center">
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm p-3">
+            <i class="bi bi-envelope-paper text-info" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">New Leads</h6>
+            <p class="mb-0">{{ total_leads|default:"0" }}</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm p-3">
+            <i class="bi bi-hdd-network text-primary" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">Machines Online</h6>
+            <p class="mb-0">{{ active_machines|default:"0" }}</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm p-3">
+            <i class="bi bi-box-seam text-warning" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">Low Inventory</h6>
+            <p class="mb-0">{{ low_stock|default:"0" }}</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm p-3">
+            <i class="bi bi-cpu text-danger" style="font-size: 2rem;"></i>
+            <h6 class="mt-2">AI Tasks Pending</h6>
+            <p class="mb-0">{{ ai_queue|default:"0" }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Section Links -->
+<div class="row mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-person-lines-fill text-dark"></i> Leads & Customer Info</h5>
+            <ul class="list-unstyled mt-2">
+                <li><a href="#" class="text-decoration-none">View Website Leads</a></li>
+                <li><a href="#" class="text-decoration-none">Export Lead Data</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-gear-wide-connected text-dark"></i> AI Tools</h5>
+            <ul class="list-unstyled mt-2">
+                <li><a href="#" class="text-decoration-none">Product Recommendations</a></li>
+                <li><a href="#" class="text-decoration-none">Demand Forecasting</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Management Section -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-hdd-stack text-dark"></i> Machine & Inventory</h5>
+            <ul class="list-unstyled mt-2">
+                <li><a href="#" class="text-decoration-none">Manage Machines</a></li>
+                <li><a href="#" class="text-decoration-none">View Inventory</a></li>
+                <li><a href="#" class="text-decoration-none">Low Stock Alerts</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-bar-chart-line text-dark"></i> Analytics & Reports</h5>
+            <ul class="list-unstyled mt-2">
+                <li><a href="#" class="text-decoration-none">Sales Reports</a></li>
+                <li><a href="#" class="text-decoration-none">Machine Usage</a></li>
+                <li><a href="#" class="text-decoration-none">Customer Behavior</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

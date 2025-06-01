@@ -1,0 +1,147 @@
+<!-- Add Location Modal -->
+<div class="modal fade" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" id="locationForm" action="{% url 'get_location' %}">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addLocationLabel">Add Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="locationName" class="form-label">Location (city, state, or neighborhood)</label>
+            <input type="text" class="form-control" id="locationName" name="location_name" placeholder="e.g. Las Vegas, NV or Summerlin, Nevada" required >
+            <div class="form-text">
+              Enter a city, state, or neighborhood name to find high traffic points nearby.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Find Points</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="pointsMapModal" tabindex="-1" aria-labelledby="pointsMapLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pointsMapLabel">High Traffic Points</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="map" style="height: 400px; width: 100%;"></div>
+      </div>
+       <div class="modal-footer">
+          <button type="button" id="savePointsBtn" class="btn btn-success">Save Points</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+       </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Google Maps API, replace YOUR_API_KEY -->
+{% for key in api_keys %}
+    {% if key.name == "Google API Key" %}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ key.key }}&callback=initMap"></script>
+    {% endif %}
+{% endfor %}
+<script>
+function initMap() {
+  // Nothing here; it gets initialized later inside modal
+}
+
+$(function() {
+  let currentPoints = [];
+  let markers = [];
+  let map;
+
+  $('#locationForm').submit(function(e) {
+    e.preventDefault();
+    
+    const locName = $('#locationName').val();
+
+    $.ajax({
+      url: '{% url "get_location" %}',
+      method: 'POST',
+      data: {
+        'location_name': locName,
+        'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(response) {
+        if (response.points && response.points.length > 0) {
+          currentPoints = response.points;  // store points globally
+          $('#addLocationModal').modal('hide');
+          $('#pointsMapModal').modal('show');  // show modal first
+        } else {
+          alert('No points found for this location.');
+        }
+      },
+      error: function(xhr) {
+        alert(xhr.responseJSON?.error || 'Error finding points. Please try again.');
+      }
+    });
+  });
+
+  // Initialize map after modal is fully shown
+  $('#pointsMapModal').on('shown.bs.modal', function () {
+    if (currentPoints.length === 0) return;
+
+    const center = { lat: currentPoints[0].latitude, lng: currentPoints[0].longitude };
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 13,
+      center: center
+    });
+
+    markers = [];
+
+    currentPoints.forEach((pt, index) => {
+      const marker = new google.maps.Marker({
+        position: { lat: pt.latitude, lng: pt.longitude },
+        map: map,
+        draggable: true, // <--- Make it draggable
+        id: index // Track which point this is
+      });
+
+      // When the marker is dragged, update the currentPoints array
+      marker.addListener('dragend', function(event) {
+        const newLat = event.latLng.lat();
+        const newLng = event.latLng.lng();
+        currentPoints[marker.id].latitude = newLat;
+        currentPoints[marker.id].longitude = newLng;
+      });
+
+      markers.push(marker);
+    });
+  });
+
+  $('#savePointsBtn').click(function() {
+    console.log('Saving updated points:', currentPoints);
+
+    const locName = $('#locationName').val();
+
+    $.ajax({
+      url: '{% url "save_updated_points" %}', 
+      method: 'POST',
+      data: {
+        'location_name': locName, 
+        'points': JSON.stringify(currentPoints),
+        'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(response) {
+        $('#pointsMapModal').modal('hide');
+        location.reload(); // Reload to update the view
+
+      },
+      error: function(xhr) {
+        alert(xhr.responseJSON?.error || 'Error saving points.');
+      }
+    });
+  });
+});
+</script>

@@ -1,0 +1,93 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Reports - SnackRanger{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2">Reports & Analytics</h1>
+    <a href="#" class="btn btn-success"><i class="bi bi-download"></i> Download Report</a>
+</div>
+
+<!-- Overview Cards -->
+<div class="row mb-4 text-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5 class="text-muted">Total Revenue</h5>
+            <h3 class="text-success">$12,450</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5 class="text-muted">Units Sold</h5>
+            <h3 class="text-primary">3,842</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3">
+            <h5 class="text-muted">Top Location</h5>
+            <h3 class="text-warning">Downtown Plaza</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Section -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5 class="mb-3">Monthly Sales (Bar Chart)</h5>
+            <div style="height: 250px; background-color: #f8f9fa;" class="d-flex align-items-center justify-content-center text-muted">
+                [ Bar Chart Placeholder ]
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5 class="mb-3">Sales by Category (Pie Chart)</h5>
+            <div style="height: 250px; background-color: #f8f9fa;" class="d-flex align-items-center justify-content-center text-muted">
+                [ Pie Chart Placeholder ]
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transaction Summary Table -->
+<div class="card shadow-sm p-3">
+    <h5 class="mb-3">Recent Transactions</h5>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Item Sold</th>
+                    <th>Units</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-05-12</td>
+                    <td>Tech Park</td>
+                    <td>Smart Chips XL</td>
+                    <td>30</td>
+                    <td>$45.00</td>
+                </tr>
+                <tr>
+                    <td>2025-05-11</td>
+                    <td>Downtown Plaza</td>
+                    <td>Energy Drink Max</td>
+                    <td>50</td>
+                    <td>$112.50</td>
+                </tr>
+                <tr>
+                    <td>2025-05-10</td>
+                    <td>University Lounge</td>
+                    <td>Protein Bar Deluxe</td>
+                    <td>15</td>
+                    <td>$45.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

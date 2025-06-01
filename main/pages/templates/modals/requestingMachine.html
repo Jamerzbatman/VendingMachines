@@ -1,0 +1,103 @@
+<!-- Modal for Requesting a Machine -->
+<div class="modal fade" id="requestMachineModal" tabindex="-1" aria-labelledby="requestMachineModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="requestMachineModalLabel">Request a Vending Machine</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+        </div>
+        <div class="modal-body">
+          <form id="requestMachineForm">
+            {% csrf_token %}
+            <!-- Step 1: User Info -->
+            <div id="step1">
+              <h4>Personal Information</h4>
+              <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required>
+              </div>
+              <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required>
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+              </div>
+              <button type="button" class="btn btn-primary" id="nextStep1">Next</button>
+            </div>
+  
+            <!-- Step 2: Company Info -->
+            <div id="step2" style="display:none;">
+              <h4>Company Information</h4>
+              <div class="mb-3">
+                <label for="companyName" class="form-label">Company Name</label>
+                <input type="text" class="form-control" id="companyName" name="companyName" required>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Company Address</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+              </div>
+              <div class="mb-3">
+                <label for="companyPhone" class="form-label">Company Phone Number</label>
+                <input type="text" class="form-control" id="companyPhone" name="companyPhone" required>
+              </div>
+              <button type="button" class="btn btn-primary" id="nextStep2">Next</button>
+            </div>
+  
+            <!-- Step 3: Machine Info -->
+            <div id="step3" style="display:none;">
+              <h4>Machine Information</h4>
+              <div class="mb-3">
+                <label for="numMachines" class="form-label">Number of Machines</label>
+                <input type="number" class="form-control" id="numMachines" name="numMachines" required>
+              </div>
+              <div class="mb-3">
+                <label for="setupTime" class="form-label">Preferred Setup Call Time</label>
+                <input type="datetime-local" class="form-control" id="setupTime" name="setupTime" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+    document.getElementById('nextStep1').addEventListener('click', function() {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+    });
+
+    document.getElementById('nextStep2').addEventListener('click', function() {
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
+    });
+
+    document.getElementById('requestMachineForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Collect the data
+    var formData = new FormData(this);
+
+    // Submit the form data via AJAX
+    fetch("{% url 'submitWebSiteLead' %}", {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = data.redirect_url;
+      } else {
+        alert('There was an error. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>

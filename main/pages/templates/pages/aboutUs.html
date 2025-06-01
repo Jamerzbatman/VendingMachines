@@ -1,0 +1,39 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}About Us - Snack Ranger{% endblock %}
+
+{% block content %}
+<section class="container my-5 section-dark">
+    <h1 class="fw-bold mb-4 text-success">About Snack Ranger</h1>
+
+    <p>
+        Snack Ranger is a family-run business founded and operated by Jamie and his son Shane. Together, we bring a unique blend of experience, passion, and dedication to revolutionize vending solutions for businesses across our community.
+    </p>
+
+    <h2 class="mt-5 mb-3">Meet Jamie – The Dad Behind the Vision</h2>
+    <p>
+        Jamie has extensive experience running technology companies and a strong background in hospitality. This combination gives him a deep understanding of what businesses and customers truly need—convenient, reliable, and tech-savvy vending solutions. His leadership ensures Snack Ranger stays innovative, customer-focused, and committed to excellence.
+    </p>
+
+    <h2 class="mt-5 mb-3">Meet Shane – The Next-Gen Snack Ranger</h2>
+    <p>
+        Shane is currently home-schooled, soaking up knowledge and skills to help grow the family business. With a natural curiosity and fresh perspective, Shane is learning everything about smart vending, technology, and customer service to help Snack Ranger provide the best possible experience for every client.
+    </p>
+
+    <h2 class="mt-5 mb-3">Our Commitment to You</h2>
+    <p>
+        As a family team, we take pride in delivering personalized service and tailored vending solutions. Whether you’re a small business or a large enterprise, we work closely with you to design, install, and maintain vending machines that meet your unique needs — making snacking easy, modern, and hassle-free.
+    </p>
+
+    <p>
+        Thank you for considering Snack Ranger for your vending needs. We look forward to partnering with you and becoming your trusted vending solution provider.
+    </p>
+</section>
+<section class="container my-5 text-center section-dark">
+    <h2 class="fw-bold mb-3">Ready to Discover How Snack Ranger Can Transform Your Vending Experience?</h2>
+    <p class="mb-4">Learn more about our smart vending solutions, personalized service, and how we can help your business thrive.</p>
+    <a href="{% url 'learnMore' %}" class="btn btn-success btn-lg px-5">
+        Learn More
+    </a>
+</section>
+{% endblock %}

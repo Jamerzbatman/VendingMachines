@@ -1,0 +1,51 @@
+  <!-- Modal -->
+<div class="modal fade" id="sellRouteModal" tabindex="-1" aria-labelledby="sellRouteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-content custom-modal-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestMachineModalLabel">Tell Us About Your Route</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="post" action="#">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="route_location" class="form-label">Route Location / Area *</label>
+                            <input type="text" class="form-control" id="route_location" name="route_location" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="machine_count" class="form-label">Number of Machines</label>
+                            <input type="number" class="form-control" id="machine_count" name="machine_count" min="0" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="monthly_revenue" class="form-label">Approximate Monthly Revenue ($)</label>
+                            <input type="number" class="form-control" id="monthly_revenue" name="monthly_revenue" min="0" step="0.01" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="additional_info" class="form-label">Additional Details or Questions</label>
+                            <textarea class="form-control" id="additional_info" name="additional_info" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Route Info</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

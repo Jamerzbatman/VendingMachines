@@ -1,0 +1,77 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Sell To Us - Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Mission Section -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-3">Our Mission</h2>
+  <p>
+    At Snack Ranger, we’re here to help vending route owners sell their business smoothly and transparently.  
+    Our goal is to offer competitive, fair deals and make the process simple — so you can step away knowing your legacy is in good hands.
+  </p>
+</section>
+
+<section class="container my-4 section-dark">
+  <h3 class="mb-2">Currently Serving Las Vegas</h3>
+  <p>
+    Right now, we focus exclusively on vending routes in the Las Vegas area.  
+    But we’re on the move — expanding to new territories soon. Stay tuned!
+  </p>
+</section>
+
+<!-- Selling Process Section -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-3">How the Selling Process Works</h2>
+  <ol class="list-unstyled">
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-pencil-square text-primary fs-2 me-3"></i>
+      <div>
+        <strong>Tell Us About Your Route:</strong> Use our quick form to share details — locations, machines, revenue, and anything important.
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-envelope-open text-success fs-2 me-3"></i>
+      <div>
+        <strong>Get a Fair, No-Pressure Offer:</strong> Our team reviews your info fast and presents a competitive proposal.
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-file-earmark-check text-warning fs-2 me-3"></i>
+      <div>
+        <strong>Seal the Deal Smoothly:</strong> If you agree, we handle paperwork and payments promptly for a hassle-free transfer.
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <i class="bi bi-hand-thumbs-up text-info fs-2 me-3"></i>
+      <div>
+        <strong>We Honor Your Legacy:</strong> We keep serving your customers with care and professionalism — growing the business you built.
+      </div>
+    </li>
+  </ol>
+</section>
+
+<!-- Respect & Care Section -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-3">We Respect What You’ve Built</h2>
+  <p>
+    Selling your vending route is more than a transaction — it’s handing over your hard-earned legacy.  
+    We get the trust you’ve earned with your customers and vendors, and we treat every route with respect and care.
+  </p>
+  <p>
+    Our promise: to maintain your route’s quality and profitability, honoring the dedication behind it.  
+    When you sell to Snack Ranger, you can relax knowing your business will be nurtured, not just taken over.
+  </p>
+</section>
+
+<!-- Call to Action Section -->
+<section class="container my-5 section-dark text-center">
+  <h2 class="mb-4">Ready to Sell Your Vending Route?</h2>
+  <p>Get a free, no-obligation offer today. Click below and tell us about your route.</p>
+  <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#sellRouteModal">
+    Sell Your Route
+  </button>
+</section>
+
+{% include 'modals/sellToUs.html' %}
+{% endblock %}

@@ -1,0 +1,131 @@
+<!-- Modal -->
+ <div class="modal fade" id="generateModal" tabindex="-1" aria-labelledby="generateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form id="lead-generation-form">
+            <div class="modal-header">
+            <h5 class="modal-title" id="generateModalLabel">Generate AI Leads</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+            <div class="mb-3">
+                <label for="location" class="form-label">Location (City or Address)</label>
+                <input type="text" class="form-control" id="location" name="location" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Describe Your Ideal Lead</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="e.g. 24-hour gyms or laundromats with high foot traffic" required></textarea>
+            </div>
+
+            <div id="lead-results" style="display: none;">
+                <h6>AI/Google Results</h6>
+                <hr>
+                <div id="progressStatus" class="alert alert-info mb-3"></div>
+                <div id="lead-results-content"></div>
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Find Leads</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let pollInterval = null;
+    let displayedMessages = new Set();
+
+
+    // Show modal
+    $('#generate').on('click', function () {
+        $('#generateModal').modal('show');
+        $('#progressStatus').text("Waiting to start...");
+        $('#lead-results').hide();
+        $('#lead-results-content').html('');
+        if (pollInterval) {
+            clearInterval(pollInterval);
+        }
+    });
+    function startPolling(jobId) {
+        if (pollInterval) {
+            clearInterval(pollInterval);
+        }
+        displayedMessages.clear(); // clear previous messages on new poll start
+        
+        pollInterval = setInterval(() => {
+            $.get(`/leads/progress/${jobId}/`, function (data) {
+                let statusText = data.status;
+
+                try {
+                    const parsed = JSON.parse(statusText);
+                    if (parsed.status) {
+                        statusText = parsed.status;
+                    }
+                } catch (e) {
+                    // Not JSON, use as-is
+                }
+
+                if (statusText.startsWith("CLEAR")) {
+                    console.log("Clearing messages...");
+                    $('#progressStatus').empty();
+                    displayedMessages.clear();
+                } else if (!displayedMessages.has(statusText)) {
+                    // Only append if message is new
+                    $('#progressStatus').append($('<div>').text(statusText));
+                    displayedMessages.add(statusText);
+                }
+
+                if (statusText.startsWith("STOP")) {
+                    clearInterval(pollInterval);
+
+                    $.get(`/leads/results/${jobId}/`, function (resultData) {
+                        $('#lead-results-content').html(resultData.html);
+                    });
+                }
+            }).fail(() => {
+                clearInterval(pollInterval);
+                $('#progressStatus').text("❌ Error retrieving progress.");
+            });
+        }, 300);
+    }
+
+    // Lead generation form submit
+    $('#lead-generation-form').on('submit', function (e) {
+        e.preventDefault();
+
+        const location = $('#location').val();
+        const description = $('#description').val();
+
+        $('#lead-results').show();
+        $('#lead-results-content').html('AI Agent Searchign...');
+
+        if (pollInterval) {
+            clearInterval(pollInterval);
+        }
+
+        $.ajax({
+            url: "{% url 'generate_leads' %}",
+            method: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+            data: {
+                location: location,
+                description: description
+            },
+            success: function (data) {
+                $('#lead-results-content').html(data.html);
+                $('#location').closest('.mb-3').hide();
+                $('#description').closest('.mb-3').hide();
+                startPolling(data.job_id);
+            },
+            error: function () {
+                $('#lead-results-content').html('<div class="text-danger">Something went wrong. Try again.</div>');
+                $('#progressStatus').text("❌ Error while generating leads.");
+            }
+        });
+    });
+</script>

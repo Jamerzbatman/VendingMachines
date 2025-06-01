@@ -1,0 +1,44 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+            <img src="{% static 'images/logos/smallSnacRanger.png' %}" alt="Snack Ranger Logo" style="height: 60px; width: auto;">
+        </a>      
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'learnMore' %}">Learn More</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'aboutUs' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sellToUs' %}">Sell To Us</a>
+                </li>
+                 {% else %}
+                 <li class="nav-item">
+                    Welcome back {{ user.username|capfirst }}
+                 </li>
+            {% endif %}
+                {% if user.is_authenticated %}
+                    <li class="nav-item ms-3">
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm px-3">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-3">
+                        <a class="nav-link fw-semibold text-white" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

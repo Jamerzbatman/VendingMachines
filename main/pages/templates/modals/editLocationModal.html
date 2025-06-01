@@ -1,0 +1,144 @@
+<!-- Edit Location Modal -->
+<div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editLocationLabel">Edit Location Points</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="editMap" style="height: 400px; width: 100%;"></div>
+      </div>
+        <div class="modal-footer">
+            <button type="button" id="deleteLocationBtn" class="btn btn-danger me-auto">Delete Location</button>
+            <button type="button" id="saveEditedPointsBtn" class="btn btn-success">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let editMap;
+let editMarkers = [];
+let currentEditPoints = [];
+let editingLocationId = null;
+
+function initEditMap() {
+  editMap = new google.maps.Map(document.getElementById('editMap'), {
+    zoom: 13,
+    center: { lat: 36.1699, lng: -115.1398 } // Default center, e.g., Las Vegas
+  });
+}
+
+$(document).ready(function() {
+  // Initialize the edit map once when the page loads
+  initEditMap();
+
+  // Listen for modal show
+  $('#editLocationModal').on('show.bs.modal', function(event) {
+    const button = $(event.relatedTarget); // Button that triggered the modal
+    editingLocationId = button.data('location-id');
+
+    if (!editingLocationId) {
+      alert('Invalid location ID');
+      return;
+    }
+
+    // Clear existing markers
+    editMarkers.forEach(marker => marker.setMap(null));
+    editMarkers = [];
+    currentEditPoints = [];
+
+    // Load points for this location
+    $.ajax({
+      url: `/get-location-points/${editingLocationId}/`, // Make this view
+      method: 'GET',
+      success: function(response) {
+        if (response.points && response.points.length > 0) {
+          currentEditPoints = response.points;
+
+          const center = {
+            lat: currentEditPoints[0].latitude,
+            lng: currentEditPoints[0].longitude
+          };
+          editMap.setCenter(center);
+
+          currentEditPoints.forEach((pt, index) => {
+            const marker = new google.maps.Marker({
+              position: { lat: pt.latitude, lng: pt.longitude },
+              map: editMap,
+              draggable: true,
+              id: index
+            });
+
+            marker.addListener('dragend', function(event) {
+              const newLat = event.latLng.lat();
+              const newLng = event.latLng.lng();
+              currentEditPoints[marker.id].latitude = newLat;
+              currentEditPoints[marker.id].longitude = newLng;
+            });
+
+            editMarkers.push(marker);
+          });
+        } else {
+          alert('No points found for this location.');
+        }
+      },
+      error: function(xhr) {
+        alert('Failed to load location points.');
+      }
+    });
+  });
+
+  $('#saveEditedPointsBtn').click(function() {
+    if (!editingLocationId) {
+      alert('No location selected to save.');
+      return;
+    }
+
+    $.ajax({
+      url: `/save-updated-location/${editingLocationId}/`, // Save view
+      method: 'POST',
+      data: {
+        'points': JSON.stringify(currentEditPoints),
+        'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(response) {
+        $('#editLocationModal').modal('hide');
+        location.reload(); // Reload to update the view
+      },
+      error: function(xhr) {
+        alert('Error saving updated points.');
+      }
+    });
+  });
+});
+$('#deleteLocationBtn').click(function() {
+  if (!editingLocationId) {
+    alert('No location selected to delete.');
+    return;
+  }
+
+  if (!confirm('Are you sure you want to delete this location? This action cannot be undone.')) {
+    return;
+  }
+
+  $.ajax({
+    url: `/delete-location/${editingLocationId}/`, // New view
+    method: 'POST',
+    data: {
+      'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+    },
+    success: function(response) {
+      $('#editLocationModal').modal('hide');
+      location.reload(); // Reload to update the list
+    },
+    error: function(xhr) {
+      alert('Error deleting location.');
+    }
+  });
+});
+</script>
+
+

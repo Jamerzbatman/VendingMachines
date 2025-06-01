@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Snack Ragers{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+   
+    {% if not user.is_authenticated %}
+        <link rel="stylesheet" href="{% static 'css/styleHome.css' %}">
+    {% endif %}
+    {% if user.is_authenticated %}
+        <link rel="stylesheet" href="{% static 'css/styleDashboard.css' %}">
+    {% endif %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-cover text-white">
+    <div class="bg-overlay">
+        {% include 'pages/nav.html' %}
+
+        <div class="container mt-4">
+            <div class="container-fluid">
+                <div class="row">
+                    {% if user.is_authenticated %}
+                        {% include 'dashboard/sidebar.html' %}
+                        <div id="live-logs" style="position: fixed; top: 106px; right: 2px; width: 300px;  background: transparent; color: #0f0; font-size: 10px; font-family: monospace;  overflow-y: auto; padding: 10px; border: none; z-index: 9999;">
+                            <div id="log-messages"></div>
+                        </div>
+                    {% endif %}
+                    
+                    <main class="{% if user.is_authenticated %}main-content{% endif %}">
+                        {% block content %}{% endblock %}
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if not user.is_authenticated %}
+      {% include 'pages/footer.html' %}
+    {% endif %}
+<script>
+let jobId = null; // No default here — will be set dynamically
+document.addEventListener("DOMContentLoaded", function() {
+    const jobId = sessionStorage.getItem('job_id');
+    if (jobId) {
+        fetchLogs(jobId);
+    }
+});
+function fetchLogs(job) {
+    jobId = job;
+
+    function fetchLogStatus() {
+        
+        if (!jobId) return;
+
+        fetch(`/leads/progress/${jobId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const logDiv = document.getElementById("log-messages");
+                logDiv.innerHTML = '';  // Clear existing logs
+                data.logs.forEach(log => {
+                    const logLine = document.createElement("div");
+                    logLine.textContent = log;
+                    logDiv.appendChild(logLine);
+                });
+
+                document.getElementById("live-logs").scrollTop = document.getElementById("live-logs").scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error fetching logs:", error);
+            });
+    }
+
+    setTimeout(() => {
+        fetchLogStatus();
+        setInterval(fetchLogStatus, 5000);
+    }, 2000);
+}
+</script>
+
+
+</body>
+      {% include 'modals/requestingMachine.html' %}
+
+</html>

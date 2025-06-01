@@ -1,0 +1,109 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Home - Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-dark text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Snack Ranger: Your Snack Frontier Guardian</h1>
+        <p class="lead mt-3">No cash. No hassle. Just snacks ready to roll when you are.</p>
+        <button type="button" class="btn btn-primary btn-lg mx-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+            Call in Your Ranger
+        </button>
+        <a href="{% url 'learnMore' %}" class="btn btn-success btn-lg mx-2">Scout the Mission</a>
+    </div>
+</section>
+
+<!-- Mission Statement -->
+<section class="container my-5 section-dark">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Our Mission</h2>
+        <p class="fs-5">
+            At Snack Ranger, we blaze the trail to bring fresh, tasty snacks right where you work and play. We’re here to keep your crew fueled with tech-powered vending that’s reliable, easy, and always stocked.
+        </p>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container my-5 section-dark">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="bi bi-binoculars-fill text-primary" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">We Handle the Trailblazing</h3>
+            <p>Setup, stocking, maintenance — we take care of it all so you don’t have to.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-credit-card-2-front text-success" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">Tap & Go — No Paper Trails</h3>
+            <p>One tap, one card — snack and move. Our machines track it all automatically.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-basket-fill text-warning" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">Stocked for Every Ranger’s Craving</h3>
+            <p>Snacks, drinks, or gear — your machine, your rules.</p>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark">
+    <div class="container">
+        <h2 class="text-center mb-4">How It Works — The Ranger Way</h2>
+        <div class="row text-center">
+            <div class="col-md-3">
+                <i class="bi bi-telephone-fill text-success" style="font-size: 2.5rem;"></i>
+                <h4 class="mt-2">Step 1</h4>
+                <p>Call in your Snack Ranger to set up a machine at your site.</p>
+            </div>
+            <div class="col-md-3">
+                <i class="bi bi-box-seam text-success" style="font-size: 2.5rem;"></i>
+                <h4 class="mt-2">Step 2</h4>
+                <p>We set up camp and stock your machine with your custom selection.</p>
+            </div>
+            <div class="col-md-3">
+                <i class="bi bi-handbag-fill text-success" style="font-size: 2.5rem;"></i>
+                <h4 class="mt-2">Step 3</h4>
+                <p>Grab a snack on the go — one tap, no cash needed.</p>
+            </div>
+            <div class="col-md-3">
+                <i class="bi bi-shield-lock-fill text-success" style="font-size: 2.5rem;"></i>
+                <h4 class="mt-2">Step 4</h4>
+                <p>We patrol, restock, and maintain your machine — 24/7 peace of mind.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Current Service Area Section -->
+<section class="container my-5 section-dark">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Patrolling Las Vegas Territory</h2>
+        <p class="fs-5">
+            Snack Ranger is proud to patrol the Las Vegas area, delivering fresh, tech-forward snack access to your workplace. We’re gearing up to expand our territory soon, so stay tuned as we bring our vending frontier to new locations across the nation.
+        </p>
+        <p class="fs-6 text-muted">Ready for Snack Ranger in your area? We’ll keep you posted!</p>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark">
+    <div class="container">
+        <h2 class="fw-bold">Deploy Your Snack Ranger Today</h2>
+        <p class="lead mb-4">Ready to fuel your crew with hassle-free, high-tech vending? Let’s get your machine rolling.</p>
+        <button type="button" class="btn btn-primary btn-lg mx-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+            Join the Ranger Crew
+        </button>
+    </div>
+</section>
+
+<!-- Sell To Us Section -->
+<section class="container my-5 section-dark text-center">
+  <h2>Own a Vending Route?</h2>
+  <p>Get a fast, fair offer to sell your route and let Snack Ranger take care of your legacy.</p>
+  <a href="{% url 'sellToUs' %}" class="btn btn-success btn-lg">
+    Sell Your Route
+  </a>
+</section>
+
+{% endblock %}

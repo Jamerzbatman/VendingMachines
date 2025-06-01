@@ -1,0 +1,123 @@
+<!-- Lead Details Modal -->
+<div class="modal fade" id="leadDetailsModal" tabindex="-1" aria-labelledby="leadDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- modal-lg for more room -->
+    <div class="modal-content text-dark">
+      <div class="modal-header flex-column">
+        <h5 class="modal-title" id="leadDetailsModalLabel">Loading...</h5>
+        <div id="map" style="width: 100%; height: 300px; margin-top: 10px; border-radius: 8px;"></div> <!-- Map will render here -->
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Address:</strong> <span id="modalAddress"></span></p>
+        <p><strong>Types:</strong> <span id="modalTypes"></span></p>
+        <p><strong>Recommendation:</strong> <span id="modalRecommendation"></span></p>
+        <p><strong>Reasons:</strong> <span id="modalReasons"></span></p>
+        <div id="emailButtons" class="mb-3">
+          <!-- Emails will be rendered as buttons -->
+        </div>
+        <div id="phoneList">
+          <!-- Phones will be listed here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a id="modalWebsiteLink" href="#" target="_blank" class="btn btn-primary">Visit Website</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    let map;
+    let marker;
+    let mapReady = false;  // <-- define it globally
+
+    function googleMapsLoaded() {
+        mapReady = true;
+        console.log('✅ Google Maps API is ready.');
+    }
+
+    const leadModal = document.getElementById('leadDetailsModal');
+
+    leadModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const leadId = button.getAttribute('data-id');
+
+        fetch(`/Leads/Details/${leadId}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('leadDetailsModalLabel').textContent = `${data.company_name} Details`;
+                document.getElementById('modalAddress').textContent = data.address;
+                document.getElementById('modalRecommendation').textContent = data.ai_recommendation;
+                document.getElementById('modalReasons').textContent = data.ai_reasons;
+                document.getElementById('modalTypes').textContent = data.types || 'N/A';
+
+                const websiteLink = document.getElementById('modalWebsiteLink');
+                if (data.company_website) {
+                    websiteLink.href = data.company_website.startsWith('http') ? data.company_website : 'http://' + data.company_website;
+                    websiteLink.style.display = 'inline-block';
+                } else {
+                    websiteLink.style.display = 'none';
+                }
+
+                const emailButtonsContainer = document.getElementById('emailButtons');
+                emailButtonsContainer.innerHTML = '';
+                data.emails.forEach(email => {
+                    const emailButton = document.createElement('a');
+                    emailButton.href = `mailto:${email}`;
+                    emailButton.className = 'btn btn-sm btn-outline-success me-2 mb-2';
+                    emailButton.textContent = email;
+                    emailButtonsContainer.appendChild(emailButton);
+                });
+
+                const phoneList = document.getElementById('phoneList');
+                phoneList.innerHTML = '';
+                if (data.phones.length > 0) {
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-unstyled';
+                    data.phones.forEach(phone => {
+                        const li = document.createElement('li');
+                        li.textContent = `📞 ${phone}`;
+                        ul.appendChild(li);
+                    });
+                    phoneList.appendChild(ul);
+                }
+
+                if (mapReady && data.location) {
+                    const [lat, lng] = data.location.split(',').map(coord => parseFloat(coord.trim()));
+                    initMap(lat, lng);
+                } else {
+                    console.error('❌ Google Maps not ready yet.');
+                }
+            })
+            .catch(error => {
+                console.error('Failed to fetch lead details:', error);
+            });
+    });
+
+    function initMap(lat, lng) {
+        const mapDiv = document.getElementById('map');
+        if (!map) {
+            map = new google.maps.Map(mapDiv, {
+                center: { lat: lat, lng: lng },
+                zoom: 14,
+            });
+            marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map,
+            });
+        } else {
+            map.setCenter({ lat: lat, lng: lng });
+            marker.setPosition({ lat: lat, lng: lng });
+        }
+    }
+</script>
+
+<!-- Google Maps API -->
+{% for key in api_keys %}
+    {% if key.name == "Google API Key" %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ key.key }}" async defer onload="googleMapsLoaded()"></script>
+    {% endif %}
+{% endfor %}
+

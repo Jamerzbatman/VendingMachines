@@ -1,0 +1,115 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Leads - SnackRanger{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2">Web Leads</h1>
+</div>
+
+<!-- Filter/Search -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form method="get" class="d-flex">
+            <input type="text" id="lead-search" name="search" class="form-control me-2" placeholder="Search by name or company">
+        </form>
+    </div>
+</div>
+
+
+<!-- ✅ Full Table Here -->
+<div id="lead-table">
+    <table class="table table-striped table-dark">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Address</th>
+                <th>Recommendation</th>
+                <th>Actions</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+            <tr>
+                <td>{{ lead.company_name }}</td>
+                <td>{{ lead.address }}</td>
+                <td>{{ lead.ai_recommendation }}</td>
+                <td>
+                    <!-- ✅ Action Buttons -->
+                    <button class="btn btn-sm btn-primary me-2" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#leadDetailsModal"
+                        data-id="{{ lead.id }}">
+                        <i class="bi bi-eye"></i> View
+                    </button>
+
+                    <a href="mailto:{{ lead.email|default:'' }}" class="btn btn-sm btn-success">
+                        <i class="bi bi-envelope"></i> Email
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+ {% include 'modals/leadDetailsModal.html' %}
+<script>
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/leads/');
+
+socket.onopen = function(e) {
+    console.log('✅ WebSocket connected.');
+};
+
+socket.onmessage = function(e) {
+    console.log('📥 WebSocket message received:', e.data);
+    const data = JSON.parse(e.data);
+
+    if (data.type === 'lead_changed') {
+        $.ajax({
+            url: "{% url 'leads' %}",
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function (response) {
+                $('#lead-table').html(response);  // ✅ THIS RIGHT HERE
+            },
+            error: function (xhr, status, error) {
+                console.error('❌ Failed to refresh lead table:', error);
+            }
+        });
+    }
+};
+
+socket.onclose = function(e) {
+    console.error('❌ WebSocket closed unexpectedly');
+};
+
+$(document).ready(function () {
+    let typingTimer;
+    const doneTypingInterval = 300;
+
+    // Live search
+    $('#lead-search').on('input', function () {
+        clearTimeout(typingTimer);
+        const query = $(this).val();
+        typingTimer = setTimeout(function () {
+            $.ajax({
+                url: "{% url 'leads' %}",
+                data: { search: query },
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (response) {
+                    const newTable = $(response).find('#lead-table').html();
+                    $('#lead-table').html(newTable);
+                },
+                error: function (xhr, status, error) {
+                    console.error('❌ Failed to search leads:', error);
+                }
+            });
+        }, doneTypingInterval);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Learn More - Snack Ranger{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+    <section class="bg-dark text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Get to Know Snack Ranger</h1>
+            <p class="lead mt-3">Discover how our smart vending machines and custom solutions bring convenience, reliability, and a modern touch to your workplace.</p>
+            <button type="button" class="btn btn-primary btn-lg mx-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+                Call in Your Ranger
+            </button>
+        </div>
+    </section>
+
+    <!-- Personalized Consultation -->
+    <section class="container my-5 section-dark">
+        <div class="d-flex align-items-start mb-3">
+            <i class="bi bi-binoculars-fill text-info fs-2 me-3"></i>
+            <div>
+                <h2>On-Site Vending Consultation</h2>
+                <p>We scout your space and analyze foot traffic to recommend the perfect vending machine setup — from compact units to high-capacity snack stations designed for your team’s needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Product Curation -->
+    <section class="container my-5 section-dark">
+        <div class="d-flex align-items-start mb-3">
+            <i class="bi bi-basket-fill text-warning fs-2 me-3"></i>
+            <div>
+                <h3>Tailored Inventory for Your Crew</h3>
+                <p>No generic junk here. We stock what matters — pain relievers, hygiene essentials, protein bars, energy drinks, and other items your team actually wants and needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reliable Restocking -->
+    <section class="container my-5 section-dark">
+        <div class="d-flex align-items-start mb-3">
+            <i class="bi bi-arrow-repeat text-danger fs-2 me-3"></i>
+            <div>
+                <h3>Consistent Restocking & Monitoring</h3>
+                <p>We restock 2–3 times a week, not just when machines run empty. With real-time tracking, your vending machines stay fully stocked and ready — no empty shelves, no wasted time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workplace Convenience -->
+    <section class="container my-5 section-dark">
+        <div class="d-flex align-items-start mb-3">
+            <i class="bi bi-building text-success fs-2 me-3"></i>
+            <div>
+                <h3>Boost Workplace Productivity & Satisfaction</h3>
+                <p>Give your employees easy access to snacks, medicine, and essentials without leaving the building — saving time and keeping your workplace running smooth.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="container my-5 section-dark text-center">
+        <h4 class="mb-3"><i class="bi bi-lightbulb-fill text-primary me-2"></i>Ready to Modernize Your Vending?</h4>
+        <p>Let’s walk your space, craft a plan, and bring hassle-free vending to your workplace.</p>
+        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+            Schedule a Free Consultation
+        </button>
+    </section>
+
+</div>
+{% endblock %}

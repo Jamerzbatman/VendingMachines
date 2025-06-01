@@ -1,0 +1,27 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+<section class="container my-5 section-dark">
+  <div class="card shadow-sm p-4 mx-auto section-dark" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Log In</h2>
+    <hr>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+      <div class="mb-3">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Log In</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

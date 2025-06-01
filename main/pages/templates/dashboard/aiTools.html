@@ -1,0 +1,117 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}AI Tools - SnackRanger{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2">AI Tools</h1>
+    <a href="#" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i> Refresh</a>
+</div>
+
+<!-- AI Tool Cards -->
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-lightbulb text-warning"></i> Lead Agent</h5>
+            <p class="small text-muted">Suggests leads around points of interest.</p>
+            <button id="runLeadAgent" class="btn btn-sm btn-primary w-100">
+                <i class="bi bi-play-fill"></i> Run Agent
+            </button>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-graph-up-arrow text-success"></i> Demand Forecast</h5>
+            <p class="small text-muted">Predicts product demand for next 30 days across all machines.</p>
+            <button class="btn btn-sm btn-success w-100"><i class="bi bi-cpu"></i> Run Forecast</button>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm p-3">
+            <h5><i class="bi bi-sliders text-info"></i> Stock Optimization</h5>
+            <p class="small text-muted">Suggests ideal product ratios to maximize profits and reduce waste.</p>
+            <button class="btn btn-sm btn-info w-100"><i class="bi bi-arrow-up-circle"></i> Optimize Stock</button>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Trigger Area -->
+<div class="card shadow-sm p-4 mt-4">
+    <h5><i class="bi bi-tools text-dark"></i> Manual Task Control</h5>
+    <form method="post" action="#">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="taskType" class="form-label">Select AI Agent</label>
+            <select class="form-select" id="taskType" name="taskType">
+                <option value="lead">Lead Agent</option>
+                <option value="forecast">Demand Forecast</option>
+                <option value="optimize">Stock Optimization</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="machineId" class="form-label">Machine ID (optional)</label>
+            <input type="text" class="form-control" id="machineId" name="machineId" placeholder="e.g. 104">
+        </div>
+        <button type="submit" class="btn btn-dark"><i class="bi bi-play-circle"></i> Run Task</button>
+    </form>
+</div>
+
+
+<!-- Recent AI Logs -->
+<div class="card shadow-sm p-4 mt-4">
+    <h5 class="mb-3"><i class="bi bi-terminal text-dark"></i> Recent AI Activity Logs</h5>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            [2025-05-13 10:22] Demand forecast completed for all regions.
+            <span class="badge bg-success">Success</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            [2025-05-12 14:10] Product recommendation failed for Machine #103.
+            <span class="badge bg-danger">Error</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            [2025-05-11 18:47] Stock optimization ran for downtown vending route.
+            <span class="badge bg-info">Info</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            [2025-05-10 09:15] AI task queue cleared.
+            <span class="badge bg-secondary">Complete</span>
+        </li>
+    </ul>
+</div>
+
+<script>
+document.getElementById('runLeadAgent').addEventListener('click', function() {
+    fetch("{% url 'generate_leads' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.job_id) {
+
+            sessionStorage.setItem('job_id', data.job_id);
+            fetchLogs(data.job_id);
+
+            // Show your modal
+            document.getElementById('leadModalBody').innerText = "Lead generation started. Tracking progress...";
+            let leadResultModal = new bootstrap.Modal(document.getElementById('leadResultModal'));
+            leadResultModal.show();
+        } else {
+            console.error('No job_id returned:', data);
+            document.getElementById('leadModalBody').innerText = "Failed to start lead generation.";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('leadModalBody').innerText = "Error starting lead generation.";
+    });
+});
+</script>
+
+
+{% endblock %}
