@@ -169,10 +169,6 @@ def lead_generation_task(job_id, user):
     add_log(job_id, f"🎯 Finished — {qualified} qualified leads found after checking {checked} businesses.")
     cache.set({job_id}, "STOP")
 
-def lead_progress(request, job_id):
-    job_id = str(job_id)  # because uuid will be passed
-    logs = cache.get({job_id}, [])
-    return JsonResponse({"logs": logs})
 
 @csrf_exempt
 def lead_results(request, job_id):

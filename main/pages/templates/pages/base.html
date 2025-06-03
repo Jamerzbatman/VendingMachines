@@ -43,43 +43,7 @@
       {% include 'pages/footer.html' %}
     {% endif %}
 <script>
-let jobId = null; // No default here — will be set dynamically
-document.addEventListener("DOMContentLoaded", function() {
-    const jobId = sessionStorage.getItem('job_id');
-    if (jobId) {
-        fetchLogs(jobId);
-    }
-});
-function fetchLogs(job) {
-    jobId = job;
 
-    function fetchLogStatus() {
-        
-        if (!jobId) return;
-
-        fetch(`/leads/progress/${jobId}/`)
-            .then(response => response.json())
-            .then(data => {
-                const logDiv = document.getElementById("log-messages");
-                logDiv.innerHTML = '';  // Clear existing logs
-                data.logs.forEach(log => {
-                    const logLine = document.createElement("div");
-                    logLine.textContent = log;
-                    logDiv.appendChild(logLine);
-                });
-
-                document.getElementById("live-logs").scrollTop = document.getElementById("live-logs").scrollHeight;
-            })
-            .catch(error => {
-                console.error("Error fetching logs:", error);
-            });
-    }
-
-    setTimeout(() => {
-        fetchLogStatus();
-        setInterval(fetchLogStatus, 5000);
-    }, 2000);
-}
 </script>
 
 

@@ -29,7 +29,6 @@ urlpatterns = [
 
     path('submit-webSite-lead/', leads.submitWebSiteLead, name='submitWebSiteLead'),
     path('Generate-Leads/', leads.generate_leads, name='generate_leads'),
-    path('leads/progress/<uuid:job_id>/', leads.lead_progress, name='lead-progress'),
     path('leads/results/<uuid:job_id>/', leads.lead_results, name='lead_results'),
     path('Leads/Details/<int:lead_id>/', leads.lead_detail, name='lead_detail'),
 

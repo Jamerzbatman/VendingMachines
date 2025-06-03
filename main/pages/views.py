@@ -4,6 +4,12 @@ from leads.models import Lead
 from django.shortcuts import render, redirect
 from dashBoardSettings.models import LeadSearchSetting, ApiKey, LocationPoints
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import make_aware
+from datetime import datetime
+from django.db.models import Count
+
+
+
 
 
 # home pages.
@@ -47,7 +53,45 @@ def aboutUs(request):
 # admin login 
 @login_required
 def dashboard(request):
-    return render(request, "dashboard/dashboard.html")  # Show dashboard if logged in
+    # Get today's date
+    today = make_aware(datetime.now()).date()
+
+    # Get the count of leads per source for today
+    leads_by_source = Lead.objects.filter(created_at__date=today).values('source').annotate(count=Count('id'))
+
+    # Create a dictionary to store the counts for each source
+    leads_count = {
+        'website': 0,
+        'ai': 0,
+    }
+
+    # Collect the leads for each source
+    leads_data = {
+        'website': Lead.objects.filter(created_at__date=today, source='website'),
+        'ai': Lead.objects.filter(created_at__date=today, source='ai'),
+    }
+
+    # Populate the dictionary with the counts
+    for lead in leads_by_source:
+        leads_count[lead['source']] = lead['count']
+
+    # Check if any source has new leads
+    is_website_new = leads_count['website'] > 0
+    is_ai_new = leads_count['ai'] > 0
+
+    # Pass total_leads, "new" flags, and leads_data to the template
+    context = {
+        'leads_count': leads_count,
+        'is_website_new': is_website_new,
+        'website_count' : leads_count['website'],
+        'ai_count' : leads_count['ai'],
+        'is_ai_new': is_ai_new,
+        'leads_data': leads_data,  # Pass the data for the modal
+    }
+
+    return render(request, "dashboard/dashboard.html", context) 
+
+
 
 @login_required
 def aiTools(request):

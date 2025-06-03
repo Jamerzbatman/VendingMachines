@@ -51,48 +51,6 @@
             clearInterval(pollInterval);
         }
     });
-    function startPolling(jobId) {
-        if (pollInterval) {
-            clearInterval(pollInterval);
-        }
-        displayedMessages.clear(); // clear previous messages on new poll start
-        
-        pollInterval = setInterval(() => {
-            $.get(`/leads/progress/${jobId}/`, function (data) {
-                let statusText = data.status;
-
-                try {
-                    const parsed = JSON.parse(statusText);
-                    if (parsed.status) {
-                        statusText = parsed.status;
-                    }
-                } catch (e) {
-                    // Not JSON, use as-is
-                }
-
-                if (statusText.startsWith("CLEAR")) {
-                    console.log("Clearing messages...");
-                    $('#progressStatus').empty();
-                    displayedMessages.clear();
-                } else if (!displayedMessages.has(statusText)) {
-                    // Only append if message is new
-                    $('#progressStatus').append($('<div>').text(statusText));
-                    displayedMessages.add(statusText);
-                }
-
-                if (statusText.startsWith("STOP")) {
-                    clearInterval(pollInterval);
-
-                    $.get(`/leads/results/${jobId}/`, function (resultData) {
-                        $('#lead-results-content').html(resultData.html);
-                    });
-                }
-            }).fail(() => {
-                clearInterval(pollInterval);
-                $('#progressStatus').text("❌ Error retrieving progress.");
-            });
-        }, 300);
-    }
 
     // Lead generation form submit
     $('#lead-generation-form').on('submit', function (e) {

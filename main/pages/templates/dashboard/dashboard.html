@@ -12,9 +12,18 @@
 <div class="row text-center">
     <div class="col-md-3 mb-3">
         <div class="card shadow-sm p-3">
-            <i class="bi bi-envelope-paper text-info" style="font-size: 2rem;"></i>
-            <h6 class="mt-2">New Leads</h6>
-            <p class="mb-0">{{ total_leads|default:"0" }}</p>
+            <div class="d-flex align-items-center">
+                <i class="bi bi-envelope-paper text-info" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 ms-2 mb-0">Leads</h6>
+            </div>
+            <ul class="list-unstyled mb-0 text-start">
+                <li class="{% if is_website_new %}text-success{% else %}text-white{% endif %}" style="{% if is_website_new %}cursor: pointer;{% else %}pointer-events: none;{% endif %}" data-bs-toggle="modal" data-bs-target="#websiteModal">
+                    Website: <span id="website-leads">{{  website_count }}</span>  <!-- Initially 0, will be updated via WebSocket -->
+                </li>
+                <li class="{% if is_ai_new %}text-success{% else %}text-white{% endif %}" style="{% if is_ai_new %}cursor: pointer;{% else %}pointer-events: none;{% endif %}" data-bs-toggle="modal" data-bs-target="#aiModal">
+                    AI: <span id="ai-leads">{{ ai_count }}</span> <!-- Initially 0, will be updated via WebSocket -->
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-md-3 mb-3">
@@ -85,5 +94,59 @@
         </div>
     </div>
 </div>
+
+{% include 'modals/dashboardLeadModels.html' %}
+
+<script>
+    // WebSocket setup
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/dashboardLeadConsumer/');
+
+    socket.onopen = function(e) {
+        console.log('✅ WebSocket connected.');
+    };
+
+    socket.onmessage = function(e) {
+        console.log('📥 WebSocket message received:', e.data);
+        const data = JSON.parse(e.data);
+
+        // Update the DOM with the new lead counts
+        document.getElementById('website-leads').textContent = data.website_leads;
+        document.getElementById('ai-leads').textContent = data.ai_leads;
+
+        // Update the Website Leads li element based on the count
+        const websiteLi = document.querySelector('[data-bs-target="#websiteModal"]');
+        if (data.website_leads > 0) {
+            websiteLi.classList.remove('text-white');
+            websiteLi.classList.add('text-success');
+            websiteLi.style.cursor = 'pointer';
+            websiteLi.style.pointerEvents = 'auto';  // Make it clickable
+        } else {
+            websiteLi.classList.remove('text-success');
+            websiteLi.classList.add('text-white');
+            websiteLi.style.cursor = 'default';
+            websiteLi.style.pointerEvents = 'none';  // Disable click
+        }
+
+        // Update the AI Leads li element based on the count
+        const aiLi = document.querySelector('[data-bs-target="#aiModal"]');
+        if (data.ai_leads > 0) {
+            aiLi.classList.remove('text-white');
+            aiLi.classList.add('text-success');
+            aiLi.style.cursor = 'pointer';
+            aiLi.style.pointerEvents = 'auto';  // Make it clickable
+        } else {
+            aiLi.classList.remove('text-success');
+            aiLi.classList.add('text-white');
+            aiLi.style.cursor = 'default';
+            aiLi.style.pointerEvents = 'none';  // Disable click
+        }
+    };
+
+    socket.onclose = function(e) {
+        console.error('❌ WebSocket closed unexpectedly');
+    };
+</script>
+
 
 {% endblock %}

@@ -54,37 +54,40 @@
 </div>
  {% include 'modals/leadDetailsModal.html' %}
 <script>
-const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/leads/');
+    
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/leads/');
 
-socket.onopen = function(e) {
-    console.log('✅ WebSocket connected.');
-};
+    socket.onopen = function(e) {
+        console.log('✅ WebSocket connected.');
+    };
 
-socket.onmessage = function(e) {
-    console.log('📥 WebSocket message received:', e.data);
-    const data = JSON.parse(e.data);
+    socket.onmessage = function(e) {
+        console.log('📥 WebSocket message received:', e.data);  
+        const data = JSON.parse(e.data);
 
-    if (data.type === 'lead_changed') {
-        $.ajax({
-            url: "{% url 'leads' %}",
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            success: function (response) {
-                const newTableBody = $(response).find('#lead-table tbody').html();
-                 $('#lead-table tbody').html(newTableBody);  
-            },
-            error: function (xhr, status, error) {
-                console.error('❌ Failed to refresh lead table:', error);
-            }
-        });
-    }
-};
+        if (data.type === 'lead_changed') {
+            // AJAX refresh
+            $.ajax({
+                url: "{% url 'leads' %}",
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (response) {
+                    const newTable = $(response).find('#lead-table').html();
+                    $('#lead-table').html(newTable);
+                },
+                error: function (xhr, status, error) {
+                    console.error('❌ Failed to refresh lead table:', error);
+                }
+            });
+        }
+    };
 
-socket.onclose = function(e) {
-    console.error('❌ WebSocket closed unexpectedly');
-};
+    socket.onclose = function(e) {
+        console.error('❌ WebSocket closed unexpectedly');
+    };
+
 
 $(document).ready(function () {
     let typingTimer;
