@@ -33,8 +33,6 @@ urlpatterns = [
     path('leads/results/<uuid:job_id>/', leads.lead_results, name='lead_results'),
     path('Leads/Details/<int:lead_id>/', leads.lead_detail, name='lead_detail'),
 
-
-
     path('Update-Lead-Settings/', dSettings.update_lead_settings, name='update_lead_settings'),
     path('Add-Api-Key/', dSettings.add_api_key, name='add_api_key'),
     path('Update-ApiKey-Settings/', dSettings.update_ApiKey_settings, name='update_ApiKey_settings'),

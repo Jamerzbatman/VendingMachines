@@ -144,6 +144,14 @@ def lead_generation_task(job_id, user):
                             LeadEmail.objects.create(lead=lead, email=email)
 
                         add_log(job_id, f"✅ Lead saved: {biz['name']}.")
+                    else:
+
+                        lead = saveLead(biz, goodOrBad_result)
+                        for phone in phoneNumbers:
+                             LeadPhone.objects.create(lead=lead, phone_number=phone)
+                        for email in emails:
+                             LeadEmail.objects.create(lead=lead, email=email)
+                        add_log(job_id, f"✅ Lead saved: {biz['name']}.")
 
                     # Sleep a small amount to avoid hammering servers
                     time.sleep(5)

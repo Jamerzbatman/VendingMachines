@@ -72,7 +72,8 @@ socket.onmessage = function(e) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             success: function (response) {
-                $('#lead-table').html(response);  // ✅ THIS RIGHT HERE
+                const newTableBody = $(response).find('#lead-table tbody').html();
+                 $('#lead-table tbody').html(newTableBody);  
             },
             error: function (xhr, status, error) {
                 console.error('❌ Failed to refresh lead table:', error);
