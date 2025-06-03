@@ -6,6 +6,7 @@ import re
 import ast
 import openai
 from dashBoardSettings.models import ApiKey
+from logs.views import add_log
 
 def openaiKey():
     api_key_obj = ApiKey.objects.filter(name="OpenAI Key").first()
@@ -64,7 +65,8 @@ def extract_json_array(text):
 
 
 
-def is_good_lead_ai(biz):
+def is_good_lead_ai(user, job_id, linked_log,biz):
+    add_log(job_id, "Gold", f"🚀 Starting AI analysis for business: {biz.get('name')}.", "long", user, linked_log)
     clean_text = (
         f"Business Name: {biz.get('name')}\n"
         f"Business Types: {', '.join(biz.get('types', []))}"
@@ -94,23 +96,43 @@ Business Information:
 {clean_text}
 \"\"\"
 """
-
-    response = call_openai(prompt, temperature=0, max_tokens=500)
+    add_log(job_id, "Gold", f"🔍 Sending prompt to AI for business '{biz.get('name')}'.", "long", user, linked_log)
     
+    response = call_openai(prompt, temperature=0, max_tokens=500)
+
+    if not response:
+        add_log(job_id, "Bronze", f"[AI] No response received for business '{biz.get('name')}'.", "long", user, linked_log)
+        return {
+            "recommendation": "No",
+            "reasons": ["AI returned no response."],
+            "contactability": "Unknown"
+        }    
     try:
         parsed = json.loads(response)
+        # Log successful response parsing
+        add_log(job_id, "Gold", f"✅ AI response parsed successfully for business '{biz.get('name')}'.", "long", user, linked_log)
     except json.JSONDecodeError:
-        import re
+        # Handle parsing errors and log them
+        add_log(job_id, "Bronze", f"[AI] Error parsing AI response for business '{biz.get('name')}'. Response: {response}", "long", user, linked_log)
+
         match = re.search(r'\{.*\}', response, re.DOTALL)
+
         if match:
             parsed = json.loads(match.group(0))
+            add_log(job_id, "Gold", f"✅ Extracted valid JSON from AI response for business '{biz.get('name')}'.", "long", user, linked_log)
         else:
             parsed = {
                 "recommendation": "No",
                 "reasons": ["Could not parse AI response."],
                 "contactability": "Unknown"
             }
-    
+    # Log the final decision from AI
+    recommendation = parsed.get("recommendation", "No")
+    contactability = parsed.get("contactability", "Unknown")
+    reasons = ', '.join(parsed.get("reasons", []))     
+     
+    add_log(job_id, "Gold", f"📊 AI analysis for business '{biz.get('name')}' completed. Recommendation: {recommendation}, Contactability: {contactability}. Reasons: {reasons}.", "long", user, linked_log)
+
     return parsed
 
 

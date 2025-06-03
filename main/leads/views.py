@@ -10,16 +10,12 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 from .models import Lead, LeadPhone, LeadEmail
 from dashBoardSettings.models import LeadSearchSetting, LocationPoints,ApiKey
+from logs.views import add_log
 import threading
 import uuid
 import json
 import time
 
-def add_log(job_id, message):
-    key = {job_id}
-    logs = cache.get(key, [])
-    logs.append(message)
-    cache.set(key, logs, timeout=3600)
 
 
 @csrf_exempt  # only if you're not using the CSRF token — otherwise omit this
@@ -48,7 +44,7 @@ def submitWebSiteLead(request):
 
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
-def saveLead(biz, goodOrBad_result):
+def saveLead(job_id, biz, goodOrBad_result, user):
     goodOrBad_reasons = goodOrBad_result.get("reasons", [])
     goodOrBad_recommendation = goodOrBad_result.get("recommendation", "No")  # Default to "No" if missing
     
@@ -65,10 +61,12 @@ def saveLead(biz, goodOrBad_result):
         ai_recommendation=goodOrBad_recommendation,
         ai_reasons="\n".join(goodOrBad_reasons) if isinstance(goodOrBad_reasons, list) else str(goodOrBad_reasons)
     )
+    add_log(job_id, "Gold", f"✅ Lead saved: {biz['name']}.", 'short', user)
     return lead
 
 def lead_generation_task(job_id, user):
-    add_log(job_id, "🚀 Starting Lead Agent...")
+
+    add_log(job_id, "Gold", "🚀 Starting Lead Agent...", 'short', user)
     
     setting = LeadSearchSetting.objects.filter(user=user).first()
     numbLeads = setting.numbLeads
@@ -80,34 +78,39 @@ def lead_generation_task(job_id, user):
 
     for location in locations:
         for loc in location.points:
-            add_log(job_id, f"📍 Searching around location {loc}...")
+            linked_log = add_log(job_id, "Gold", f"📍 Searching around location {loc}...", 'short', user)
             location_str = f"{loc['latitude']},{loc['longitude']}"
-            places = search_google_places(location_str, keywords)
+            places = search_google_places(user, job_id, linked_log, location_str, keywords)
             existing_addresses = set(Lead.objects.values_list('address', flat=True))
             places = [place for place in places if place.get('vicinity', '') not in existing_addresses]
-            add_log(job_id, f"🛡️ Filtered places — {len(places)} new leads remain after removing duplicates.")
+            add_log(job_id,"Gold", f"🛡️ Filtered places — {len(places)} new leads remain after removing duplicates.", 'short', user,linked_log)
 
             for biz in places:
                 try:
                     checked += 1
-                    goodOrBad = is_good_lead_ai(biz)
+
+                    linked_log = add_log(job_id, "Gold", f"📍 Checking Ai...", 'short', user)
+
+                    goodOrBad = is_good_lead_ai(user, job_id, linked_log,biz)
                     if isinstance(goodOrBad, str):
                         goodOrBad_result = json.loads(goodOrBad)
                     else:
                         goodOrBad_result = goodOrBad
 
                     if goodOrBad_result.get("recommendation", "").strip().lower() == "no":
-                        add_log(job_id, f"❌ {biz.get('name', 'Unknown Business')} was not recommended.")
-                        saveLead(biz, goodOrBad_result)
+                        saveLead(job_id,biz, goodOrBad_result,user)
+                        add_log(job_id, "Silver", f"🤖 AI Analysis Said No to {biz['name']}", 'short', user,linked_log)
                         continue
+
 
                     if not biz.get('website'):
-                        add_log(job_id, f"⚠️ {biz.get('name', 'Unknown Business')} has no website; saving basic info.")
-                        saveLead(biz, goodOrBad_result)
+                        saveLead(job_id,biz, goodOrBad_result,user)
+                        add_log(job_id, "Silver", f"🔥 {biz['name']} has no website", 'short', user)
                         continue
 
-                    add_log(job_id, f"🌐 Fetching website content for {biz.get('name', 'Unknown Business')}...")
-                    homeHtml = get_rendered_html(biz.get('website'))
+                    linked_log =  add_log(job_id,'Gold', f"🌐 Fetching website content for {biz.get('name', 'Unknown Business')}...", 'short', user)
+                    homeHtml = get_rendered_html(user, job_id, linked_log, biz.get('website'))
+                    user, job_id, linked_log,
                     emails = set(extract_emails_from_html(homeHtml))
                     phoneNumbers = set(extract_phone_numbers_from_html(homeHtml))
 
@@ -115,27 +118,27 @@ def lead_generation_task(job_id, user):
                     contactPage = find_contact_page_url(biz.get('website'), homeHtml)
 
                     if contactPage:
-                        add_log(job_id, f"📄 Found Contact Page. Extracting contact info...")
-                        contactHtml = get_rendered_html(contactPage)
+                        linked_log = add_log(job_id,'Gold', f"📄 Found Contact Page. Extracting contact info...", 'short', user)
+                        contactHtml = get_rendered_html(user, job_id, linked_log,contactPage)
                         emails.update(extract_emails_from_html(contactHtml))
                         phoneNumbers.update(extract_phone_numbers_from_html(contactHtml))
 
                     if storyPage:
-                        add_log(job_id, f"📖 Found About Page. Analyzing for vending opportunity...")
-                        storyHtml = get_rendered_html(storyPage)
+                        linked_log =  add_log(job_id,'Gold', f"📖 Found About Page. Analyzing for vending opportunity...", 'short', user)
+                        storyHtml = get_rendered_html(user, job_id, linked_log,storyPage)
                         clean_text = extract_clean_text(storyHtml, max_chars=15000)
                         analyze = analyze_company_for_vending(clean_text)
                         try:
                             result = json.loads(analyze)
                             recommendation = result.get("recommendation", "")
                             reasons = result.get("reasons", [])
-                            add_log(job_id, f"🤖 AI Analysis for {biz['name']}: {recommendation.upper()} — {', '.join(reasons)}")
+                            add_log(job_id,'Gold', f"🤖 AI Analysis for {biz['name']}: {recommendation.upper()} — {', '.join(reasons)}", 'short', user)
                             if "yes" in recommendation.lower():
                                 qualified += 1
                         except json.JSONDecodeError:
                             result = goodOrBad_result  # fallback to the first AI result if second one fails
 
-                        lead = saveLead(biz, result)
+                        lead = saveLead(job_id,biz, result,user)
 
                         for phone in phoneNumbers:
                             LeadPhone.objects.create(lead=lead, phone_number=phone)
@@ -143,15 +146,15 @@ def lead_generation_task(job_id, user):
                         for email in emails:
                             LeadEmail.objects.create(lead=lead, email=email)
 
-                        add_log(job_id, f"✅ Lead saved: {biz['name']}.")
+                        add_log(job_id,'Gold', f"✅ Lead saved: {biz['name']}.", 'short', user)
                     else:
 
-                        lead = saveLead(biz, goodOrBad_result)
+                        lead = saveLead(job_id,biz, goodOrBad_result,user)
                         for phone in phoneNumbers:
                              LeadPhone.objects.create(lead=lead, phone_number=phone)
                         for email in emails:
                              LeadEmail.objects.create(lead=lead, email=email)
-                        add_log(job_id, f"✅ Lead saved: {biz['name']}.")
+                        add_log(job_id,'Gold', f"✅ Lead saved: {biz['name']}.", 'short', user)
 
                     # Sleep a small amount to avoid hammering servers
                     time.sleep(5)
@@ -159,15 +162,15 @@ def lead_generation_task(job_id, user):
                     if qualified >= int(numbLeads):
                         break
                 except Exception as e:
-                    add_log(job_id, f"🔥 Error processing {biz.get('name', 'Unknown Business')}: {str(e)}")
+                    add_log(job_id, "Bronze", f"🔥 Error processing {biz.get('name', 'Unknown Business')}: {str(e)}", 'short', user)
+
 
             if qualified >= int(numbLeads):
                 break
         if qualified >= int(numbLeads):
             break
 
-    add_log(job_id, f"🎯 Finished — {qualified} qualified leads found after checking {checked} businesses.")
-    cache.set({job_id}, "STOP")
+    add_log(job_id,"Gold", f"🎯 Finished — {qualified} qualified leads found after checking {checked} businesses.",'short', user)
 
 
 @csrf_exempt

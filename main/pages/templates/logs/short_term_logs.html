@@ -1,0 +1,5 @@
+<!-- short_term_logs.html -->
+<h2>Short Term Logs</h2>
+{% for log in logs %}
+    <p>{{ log.created_at }} - {{ log.log_data }}</p>
+{% endfor %}
