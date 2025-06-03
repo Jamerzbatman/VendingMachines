@@ -23,6 +23,9 @@
                 <li class="{% if is_ai_new %}text-success{% else %}text-white{% endif %}" style="{% if is_ai_new %}cursor: pointer;{% else %}pointer-events: none;{% endif %}" data-bs-toggle="modal" data-bs-target="#aiModal">
                     AI: <span id="ai-leads">{{ ai_count }}</span> <!-- Initially 0, will be updated via WebSocket -->
                 </li>
+                <li class="text-white">
+                    Total Leads: <span id="total-leads">{{ total_leads }}</span>
+                </li>
             </ul>
         </div>
     </div>
@@ -99,20 +102,21 @@
 
 <script>
     // WebSocket setup
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/dashboardLeadConsumer/');
+    const dashboardLeadProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const dashboardLeadSocket = new WebSocket(dashboardLeadProtocol + '://' + window.location.host + '/ws/dashboardLeadConsumer/');
 
-    socket.onopen = function(e) {
+    dashboardLeadSocket.onopen = function(e) {
         console.log('✅ WebSocket connected.');
     };
 
-    socket.onmessage = function(e) {
+    dashboardLeadSocket.onmessage = function(e) {
         console.log('📥 WebSocket message received:', e.data);
         const data = JSON.parse(e.data);
 
         // Update the DOM with the new lead counts
         document.getElementById('website-leads').textContent = data.website_leads;
         document.getElementById('ai-leads').textContent = data.ai_leads;
+        document.getElementById('total-leads').textContent = data.total_leads;
 
         // Update the Website Leads li element based on the count
         const websiteLi = document.querySelector('[data-bs-target="#websiteModal"]');
@@ -143,7 +147,7 @@
         }
     };
 
-    socket.onclose = function(e) {
+    dashboardLeadSocket.onclose = function(e) {
         console.error('❌ WebSocket closed unexpectedly');
     };
 </script>

@@ -85,6 +85,7 @@ def dashboard(request):
         'is_website_new': is_website_new,
         'website_count' : leads_count['website'],
         'ai_count' : leads_count['ai'],
+        "total_leads": Lead.objects.count(),
         'is_ai_new': is_ai_new,
         'leads_data': leads_data,  # Pass the data for the modal
     }
@@ -95,27 +96,41 @@ def dashboard(request):
 
 @login_required
 def aiTools(request):
-    return render(request, "dashboard/aiTools.html")  # Show dashboard if logged in
+    context = {
+        "total_leads": Lead.objects.count(),
+    }
+    return render(request, "dashboard/aiTools.html", context)  # Show dashboard if logged in
 
 @login_required
 def leads(request):
     leads = Lead.objects.all().order_by('-created_at')
     api_keys = ApiKey.objects.all()
+    context = {
+        "total_leads": Lead.objects.count(),
+    }
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        # ⬇️ Return only the table part
-        return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys})
+       
+        return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys , "total_leads": Lead.objects.count(),})
 
     # Full page render
-    return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys})
+    return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys,  "total_leads": Lead.objects.count(),})
 
 
 @login_required
 def inventory(request):
-    return render(request, "dashboard/inventory.html")  # Show dashboard if logged in
+    context = {
+        "total_leads": Lead.objects.count(),
+    }
+
+    return render(request, "dashboard/inventory.html", context)  # Show dashboard if logged in
 
 @login_required
 def reports(request):
-    return render(request, "dashboard/reports.html")  # Show dashboard if logged in
+    context = {
+        "total_leads": Lead.objects.count(),
+    }
+    return render(request, "dashboard/reports.html", context)  # Show dashboard if logged in
 
 @login_required
 def settings(request):
@@ -123,6 +138,7 @@ def settings(request):
 
     context = {
         'setting': setting,
+        "total_leads": Lead.objects.count(),
         'api_keys': ApiKey.objects.all(),
         'locations': LocationPoints.objects.filter(user=request.user)
     }

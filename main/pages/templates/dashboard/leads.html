@@ -55,14 +55,14 @@
  {% include 'modals/leadDetailsModal.html' %}
 <script>
     
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/leads/');
+    const leadsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const leadsSocket = new WebSocket(leadsProtocol + '://' + window.location.host + '/ws/leads/');
 
-    socket.onopen = function(e) {
+    leadsSocket.onopen = function(e) {
         console.log('✅ WebSocket connected.');
     };
 
-    socket.onmessage = function(e) {
+    leadsSocket.onmessage = function(e) {
         console.log('📥 WebSocket message received:', e.data);  
         const data = JSON.parse(e.data);
 
@@ -84,7 +84,7 @@
         }
     };
 
-    socket.onclose = function(e) {
+    leadsSocket.onclose = function(e) {
         console.error('❌ WebSocket closed unexpectedly');
     };
 

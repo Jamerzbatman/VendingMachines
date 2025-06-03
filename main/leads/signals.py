@@ -16,6 +16,7 @@ def lead_saved(sender, instance, created, **kwargs):
     # Get today's lead counts for 'website' and 'ai' sources
     website_leads = get_today_leads_count('website')
     ai_leads = get_today_leads_count('ai')
+    total_leads = Lead.objects.count()
 
     # Send the updated lead counts to WebSocket
     channel_layer = get_channel_layer()
@@ -25,16 +26,36 @@ def lead_saved(sender, instance, created, **kwargs):
             "type": "lead_changed",  # Event type
             "website_leads": website_leads,
             "ai_leads": ai_leads,
+            "total_leads": total_leads,
             "message": f"Lead {'added' if created else 'updated'}: {instance.company_name}"
         }
     )
+    async_to_sync(channel_layer.group_send)(
+        "dashboard_leads_group",  # The group name
+        {
+            "type": "lead_changed",  # Event type
+            "website_leads": website_leads,
+            "ai_leads": ai_leads,
+            "total_leads": total_leads,
+            "message": f"Lead {'added' if created else 'updated'}: {instance.company_name}"
+        }
+    )
+    async_to_sync(channel_layer.group_send)(
+        "sidebar_leads_group",  # The group name
+        {
+            "type": "lead_changed",  # Event type
+            "total_leads": total_leads,
+            "message": f"Lead {'added' if created else 'updated'}: {instance.company_name}"
+        }
+    )
+
 
 @receiver(post_delete, sender=Lead)
 def lead_deleted(sender, instance, **kwargs):
     # Get today's lead counts for 'website' and 'ai' sources after deletion
     website_leads = get_today_leads_count('website')
     ai_leads = get_today_leads_count('ai')
-
+    total_leads = Lead.objects.count()
     # Send the updated lead counts to WebSocket
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -43,7 +64,27 @@ def lead_deleted(sender, instance, **kwargs):
             "type": "lead_changed",  # Event type
             "website_leads": website_leads,
             "ai_leads": ai_leads,
+            "total_leads": total_leads,
             "message": f"Lead deleted: {instance.company_name}"
 
         }
     )
+    async_to_sync(channel_layer.group_send)(
+        "dashboard_leads_group",  # The group name
+        {
+            "type": "lead_changed",  # Event type
+            "website_leads": website_leads,
+            "ai_leads": ai_leads,
+            "total_leads": total_leads,
+            "message": f"Lead deleted: {instance.company_name}"
+        }
+    )
+    async_to_sync(channel_layer.group_send)(
+        "sidebar_leads_group",  # The group name
+        {
+            "type": "lead_changed",  # Event type
+            "total_leads": total_leads,
+            "message": f"Lead deleted: {instance.company_name}"
+        }
+    )
+
