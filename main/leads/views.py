@@ -1,4 +1,4 @@
-from ai_engine.utils import call_openai_to_get_keywords, is_good_lead_ai, extract_info_chunked, analyze_company_for_vending
+from ai_engine.utils import is_good_lead_ai, analyze_company_for_vending
 from scrap.utils import get_rendered_html, extract_clean_text, extract_emails_from_html, extract_phone_numbers_from_html, find_contact_page_url, find_about_page_url
 from google_engine.utils import search_google_places
 from django.views.decorators.csrf import csrf_exempt
@@ -9,14 +9,12 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from .models import Lead, LeadPhone, LeadEmail
-from dashBoardSettings.models import LeadSearchSetting, LocationPoints,ApiKey
+from dashBoardSettings.models import LeadSearchSetting, LocationPoints
 from logs.views import add_log
 import threading
 import uuid
 import json
 import time
-
-
 
 @csrf_exempt  # only if you're not using the CSRF token — otherwise omit this
 def submitWebSiteLead(request):
