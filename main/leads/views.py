@@ -66,9 +66,7 @@ def saveLead(job_id, biz, goodOrBad_result, user):
 
 def lead_generation_task(job_id, user):
 
-    add_log(job_id, "Gold", "🚀 Starting Lead Agent...", 'short', user)
-def fuckyou(job_id, user):
-    
+    add_log(job_id, "Gold", "🚀 Starting Lead Agent...", 'short', user)    
     setting = LeadSearchSetting.objects.filter(user=user).first()
     numbLeads = setting.numbLeads
     keywords = setting.keywords
