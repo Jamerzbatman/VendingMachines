@@ -49,7 +49,8 @@
 
 {% if user.is_authenticated %}
 <script>
-const logSocket = new WebSocket('ws://' + window.location.host + '/ws/logs/');
+const logProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const logSocket = new WebSocket(logProtocol + '://' + window.location.host + '/ws/logs/');
 
 logSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
