@@ -109,7 +109,6 @@ def lead_generation_task(job_id, user):
 
                     linked_log =  add_log(job_id,'Gold', f"🌐 Fetching website content for {biz.get('name', 'Unknown Business')}...", 'short', user)
                     homeHtml = get_rendered_html(user, job_id, linked_log, biz.get('website'))
-                    user, job_id, linked_log,
                     emails = set(extract_emails_from_html(homeHtml))
                     phoneNumbers = set(extract_phone_numbers_from_html(homeHtml))
 

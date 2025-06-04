@@ -21,12 +21,10 @@ def get_place_details(place_id, api_key):
 
     response = requests.get(GOOGLE_PLACE_DETAILS_URL, params=params)
     if response.status_code != 200:
-        print(f"[PlaceDetailsAPI] Error: {response.status_code} - {response.text}")
         return {}
 
     data = response.json()
     if 'error_message' in data:
-        print(f"[PlaceDetailsAPI] API error: {data['error_message']}")
         return {}
 
     return data.get('result', {})

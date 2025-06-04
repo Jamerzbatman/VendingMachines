@@ -30,12 +30,10 @@ def call_openai(prompt, system_message="You are a helpful assistant.",
                 max_tokens=max_tokens
             )
             return resp.choices[0].message.content.strip()
-        except openai.error.RateLimitError as e:
+        except openai.error.RateLimitError:
             wait = 10 + attempt*5
-            print(f"[Rate Limit] retry in {wait}s: {e}")
             time.sleep(wait)
-        except Exception as e:
-            print(f"[OpenAI Error] {e}")
+        except Exception:
             break
     return ""
 
@@ -48,8 +46,7 @@ Return a Python list of search terms matching this need. Only the list."""
     try:
         lst = ast.literal_eval(out)
         return lst if isinstance(lst, list) else []
-    except:
-        print(f"[Keyword Parse Error] {out}")
+    except Exception:
         return []
 
 
@@ -59,8 +56,7 @@ def extract_json_array(text):
         return []
     try:
         return json.loads(m.group(0))
-    except Exception as e:
-        print(f"[JSON Extract Error] {e}")
+    except Exception:
         return []
 
 
@@ -223,13 +219,8 @@ def extract_info_with_openai(prompt):
         match = re.search(r'\{.*\}', content, re.DOTALL)
         if match:
             return json.loads(match.group(0))
-        else:
-            print("[Parse Error] Could not find JSON in GPT output.")
-            print("GPT output was:", content)
-            return {}
-    except json.JSONDecodeError as e:
-        print(f"[JSON Decode Error] {e}")
-        print("GPT output was:", content)
+        return {}
+    except json.JSONDecodeError:
         return {}
     
 
@@ -311,8 +302,7 @@ Return ONLY a JSON array like this:
 
         return valid_points
 
-    except Exception as e:
-        print(f"[OpenAI error in get_high_traffic_points]: {e}")
+    except Exception:
         # Fallback: return a few simple points near original lat/lng
         return [
             {"latitude": lat + 0.001, "longitude": lng + 0.001},
