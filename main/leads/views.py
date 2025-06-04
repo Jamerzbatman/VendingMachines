@@ -25,17 +25,23 @@ def submitWebSiteLead(request):
             setup_time_raw = request.POST.get('setupTime')
             setup_time = datetime.strptime(setup_time_raw, '%Y-%m-%dT%H:%M')
 
+            phone = request.POST.get('phone')
+            company_phone = request.POST.get('companyPhone')
+
             lead = Lead.objects.create(
                 first_name=request.POST.get('firstName'),
                 last_name=request.POST.get('lastName'),
-                phone=request.POST.get('phone'),
                 company_name=request.POST.get('companyName'),
                 address=request.POST.get('address'),
-                company_phone=request.POST.get('companyPhone'),
                 num_machines=request.POST.get('numMachines'),
                 setup_time=setup_time,
                 source='website'
             )
+
+            if phone:
+                LeadPhone.objects.create(lead=lead, phone_number=phone)
+            if company_phone:
+                LeadPhone.objects.create(lead=lead, phone_number=company_phone)
 
             return JsonResponse({'success': True, 'redirect_url': reverse('thankYou')})
 
@@ -109,7 +115,6 @@ def lead_generation_task(job_id, user):
 
                     linked_log =  add_log(job_id,'Gold', f"🌐 Fetching website content for {biz.get('name', 'Unknown Business')}...", 'short', user)
                     homeHtml = get_rendered_html(user, job_id, linked_log, biz.get('website'))
-                    user, job_id, linked_log,
                     emails = set(extract_emails_from_html(homeHtml))
                     phoneNumbers = set(extract_phone_numbers_from_html(homeHtml))
 
