@@ -9,6 +9,8 @@ import json
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.http import JsonResponse
+from logs.views import add_log
+import uuid
 
 
 @login_required
@@ -18,6 +20,8 @@ def update_lead_settings(request):
         setting.numbLeads = request.POST.get('numbLeads', setting.numbLeads)
         setting.save()
         messages.success(request, "Lead search settings updated successfully.")
+        job_id = str(uuid.uuid4())
+        add_log(job_id, "Gold", "Lead search settings updated.", "short", request.user)
     return redirect('settings')
 
 @login_required
@@ -36,6 +40,8 @@ def update_ApiKey_settings(request):
                     continue
         if updated:
             messages.success(request, "API keys updated successfully.")
+            job_id = str(uuid.uuid4())
+            add_log(job_id, "Gold", "API keys updated successfully.", "short", request.user)
     return redirect('settings')
     
 @login_required
@@ -46,6 +52,8 @@ def add_api_key(request):
         if name and key:
             ApiKey.objects.create(user=request.user, name=name, key=key)
             messages.success(request, f"API key '{name}' added successfully.")
+            job_id = str(uuid.uuid4())
+            add_log(job_id, "Gold", f"API key '{name}' added.", "short", request.user)
         else:
             messages.error(request, "Please provide both a name and an API key.")
     return redirect('settings')
@@ -73,6 +81,8 @@ def add_keywords(request):
         lead_settings.save()
 
         messages.success(request, f"Added keywords: {', '.join(new_keywords)}")
+        job_id = str(uuid.uuid4())
+        add_log(job_id, "Gold", f"Added keywords: {', '.join(new_keywords)}", "short", request.user)
         return redirect('settings')
 
     # For GET, show a simple form or redirect
@@ -124,12 +134,15 @@ def save_updated_points(request):
 
     # Save to database
     location = LocationPoints.objects.create(
-        user=request.user, 
+        user=request.user,
         location_name=location_name,
         points=points_data
     )
 
     messages.success(request, f"Added Location: {location_name}")
+    job_id = str(uuid.uuid4())
+    short_log = add_log(job_id, "Gold", f"Added location {location_name}.", "short", request.user)
+    add_log(job_id, "Gold", f"Points: {points_data}", "long", request.user, short_log)
     return JsonResponse({'message': 'Points saved successfully.', 'id': location.id})
 
 
@@ -160,6 +173,9 @@ def save_updated_location(request, location_id):
     location.save()
 
     messages.success(request, "Points updated successfully.")
+    job_id = str(uuid.uuid4())
+    short_log = add_log(job_id, "Gold", f"Updated location {location.location_name}.", "short", request.user)
+    add_log(job_id, "Gold", f"New points: {points_data}", "long", request.user, short_log)
     return JsonResponse({'message': 'Points edite successfully.', 'id': location.id})
 
 @login_required
@@ -170,6 +186,8 @@ def delete_location(request, location_id):
     location_name = location.location_name
     location.delete()
     messages.success(request, f'Location "{location_name}" has been deleted.')
+    job_id = str(uuid.uuid4())
+    add_log(job_id, "Gold", f"Deleted location {location_name}.", "short", request.user)
     return JsonResponse({'message': 'Location deleted successfully.'})
 
 
