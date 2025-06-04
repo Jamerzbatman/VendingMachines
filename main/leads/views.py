@@ -1,4 +1,4 @@
-from ai_engine.utils import call_openai_to_get_keywords, is_good_lead_ai, extract_info_chunked, analyze_company_for_vending
+from ai_engine.utils import is_good_lead_ai, analyze_company_for_vending
 from scrap.utils import get_rendered_html, extract_clean_text, extract_emails_from_html, extract_phone_numbers_from_html, find_contact_page_url, find_about_page_url
 from google_engine.utils import search_google_places
 from django.views.decorators.csrf import csrf_exempt
@@ -9,14 +9,12 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from .models import Lead, LeadPhone, LeadEmail
-from dashBoardSettings.models import LeadSearchSetting, LocationPoints,ApiKey
+from dashBoardSettings.models import LeadSearchSetting, LocationPoints
 from logs.views import add_log
 import threading
 import uuid
 import json
 import time
-
-
 
 @csrf_exempt  # only if you're not using the CSRF token — otherwise omit this
 def submitWebSiteLead(request):
@@ -25,17 +23,23 @@ def submitWebSiteLead(request):
             setup_time_raw = request.POST.get('setupTime')
             setup_time = datetime.strptime(setup_time_raw, '%Y-%m-%dT%H:%M')
 
+            phone = request.POST.get('phone')
+            company_phone = request.POST.get('companyPhone')
+
             lead = Lead.objects.create(
                 first_name=request.POST.get('firstName'),
                 last_name=request.POST.get('lastName'),
-                phone=request.POST.get('phone'),
                 company_name=request.POST.get('companyName'),
                 address=request.POST.get('address'),
-                company_phone=request.POST.get('companyPhone'),
                 num_machines=request.POST.get('numMachines'),
                 setup_time=setup_time,
                 source='website'
             )
+
+            if phone:
+                LeadPhone.objects.create(lead=lead, phone_number=phone)
+            if company_phone:
+                LeadPhone.objects.create(lead=lead, phone_number=company_phone)
 
             return JsonResponse({'success': True, 'redirect_url': reverse('thankYou')})
 
@@ -109,7 +113,6 @@ def lead_generation_task(job_id, user):
 
                     linked_log =  add_log(job_id,'Gold', f"🌐 Fetching website content for {biz.get('name', 'Unknown Business')}...", 'short', user)
                     homeHtml = get_rendered_html(user, job_id, linked_log, biz.get('website'))
-                    user, job_id, linked_log,
                     emails = set(extract_emails_from_html(homeHtml))
                     phoneNumbers = set(extract_phone_numbers_from_html(homeHtml))
 
