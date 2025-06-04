@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
 from django.urls import path
+from django.contrib.auth import views as auth_views
+
+from dashBoardSettings import views as dSettings
 from pages import views as page
 from leads import views as leads
-from dashBoardSettings import views as dSettings
+from logs import views as logs
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +30,9 @@ urlpatterns = [
     path('Settings/', page.settings, name='settings'),
     path('About-Us/', page.aboutUs, name='aboutUs'),
 
+
+    path('Min-Short-Logs/', logs.Min_Short_Logs, name='minShortLogs'),
+
     path('submit-webSite-lead/', leads.submitWebSiteLead, name='submitWebSiteLead'),
     path('Generate-Leads/', leads.generate_leads, name='generate_leads'),
     path('leads/results/<uuid:job_id>/', leads.lead_results, name='lead_results'),
@@ -41,6 +47,7 @@ urlpatterns = [
     path('get-location-points/<int:location_id>/', dSettings.get_location_points, name='get_location_points'),
     path('save-updated-location/<int:location_id>/', dSettings.save_updated_location, name='save_updated_location'),
     path('delete-location/<int:location_id>/', dSettings.delete_location, name='delete_location'),
+
 
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

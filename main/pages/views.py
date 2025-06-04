@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
-from django.shortcuts import render
-from leads.models import Lead
-from django.shortcuts import render, redirect
-from dashBoardSettings.models import LeadSearchSetting, ApiKey, LocationPoints
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import make_aware
+
 from datetime import datetime
 from django.db.models import Count
+from datetime import timedelta
+from django.utils import timezone
+
+from dashBoardSettings.models import LeadSearchSetting, ApiKey, LocationPoints
+from leads.models import Lead
+from logs.models import Log
+
 
 
 
@@ -49,14 +53,18 @@ def aboutUs(request):
     return render(request, "pages/aboutUs.html")  # Show home page if not logged in
 
 
+def Get_Short_log(user):
+    current_time = timezone.now()
+    one_minute_ago = current_time - timedelta(minutes=1)
+    recent_logs = Log.objects.filter(user=user, log_type='short', created_at__gte=one_minute_ago)
+    return recent_logs
 
 # admin login 
 @login_required
 def dashboard(request):
-    # Get today's date
-    today = make_aware(datetime.now()).date()
 
     # Get the count of leads per source for today
+    today = make_aware(datetime.now()).date()
     leads_by_source = Lead.objects.filter(created_at__date=today).values('source').annotate(count=Count('id'))
 
     # Create a dictionary to store the counts for each source
@@ -81,13 +89,14 @@ def dashboard(request):
 
     # Pass total_leads, "new" flags, and leads_data to the template
     context = {
+        'recent_logs': Get_Short_log(request.user),
         'leads_count': leads_count,
         'is_website_new': is_website_new,
         'website_count' : leads_count['website'],
         'ai_count' : leads_count['ai'],
         "total_leads": Lead.objects.count(),
         'is_ai_new': is_ai_new,
-        'leads_data': leads_data,  # Pass the data for the modal
+        'leads_data': leads_data,
     }
 
     return render(request, "dashboard/dashboard.html", context) 
@@ -96,30 +105,35 @@ def dashboard(request):
 
 @login_required
 def aiTools(request):
+
     context = {
+        'recent_logs': Get_Short_log(request.user),
         "total_leads": Lead.objects.count(),
     }
     return render(request, "dashboard/aiTools.html", context)  # Show dashboard if logged in
 
 @login_required
 def leads(request):
-    leads = Lead.objects.all().order_by('-created_at')
-    api_keys = ApiKey.objects.all()
+
     context = {
+        'recent_logs': Get_Short_log(request.user),
         "total_leads": Lead.objects.count(),
+        "leads" : Lead.objects.all().order_by('-created_at'),
+        "api_keys" : ApiKey.objects.all()
     }
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
        
-        return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys , "total_leads": Lead.objects.count(),})
+        return render(request, 'dashboard/leads.html', context)
 
     # Full page render
-    return render(request, 'dashboard/leads.html', {'leads': leads, 'api_keys': api_keys,  "total_leads": Lead.objects.count(),})
+    return render(request, 'dashboard/leads.html', context)
 
 
 @login_required
 def inventory(request):
     context = {
+        'recent_logs': Get_Short_log(request.user),
         "total_leads": Lead.objects.count(),
     }
 
@@ -128,15 +142,18 @@ def inventory(request):
 @login_required
 def reports(request):
     context = {
+        'recent_logs': Get_Short_log(request.user),
         "total_leads": Lead.objects.count(),
     }
     return render(request, "dashboard/reports.html", context)  # Show dashboard if logged in
 
 @login_required
 def settings(request):
+
     setting, _ = LeadSearchSetting.objects.get_or_create(user=request.user)
 
     context = {
+        'recent_logs': Get_Short_log(request.user),
         'setting': setting,
         "total_leads": Lead.objects.count(),
         'api_keys': ApiKey.objects.all(),

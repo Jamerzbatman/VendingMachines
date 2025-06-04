@@ -83,6 +83,7 @@
 <script>
 document.getElementById('runLeadAgent').addEventListener('click', function() {
     fetch("{% url 'generate_leads' %}", {
+        
         method: 'POST',
         headers: {
             'X-CSRFToken': '{{ csrf_token }}',
@@ -90,28 +91,26 @@ document.getElementById('runLeadAgent').addEventListener('click', function() {
         },
         body: JSON.stringify({})
     })
+    
     .then(response => response.json())
     .then(data => {
         if (data.job_id) {
 
-            sessionStorage.setItem('job_id', data.job_id);
-            fetchLogs(data.job_id);
-
-            // Show your modal
-            document.getElementById('leadModalBody').innerText = "Lead generation started. Tracking progress...";
-            let leadResultModal = new bootstrap.Modal(document.getElementById('leadResultModal'));
-            leadResultModal.show();
+            console.log('Lead generation job started with job_id:', data.job_id);
+            // You may choose to keep checking job status via periodic AJAX if necessary
         } else {
+            // Handle failure in lead generation start
             console.error('No job_id returned:', data);
             document.getElementById('leadModalBody').innerText = "Failed to start lead generation.";
         }
     })
     .catch(error => {
+        // Handle any errors during the fetch
         console.error('Error:', error);
         document.getElementById('leadModalBody').innerText = "Error starting lead generation.";
-    });
-});
-</script>
+    })
+  });
+  </script>
 
 
 {% endblock %}

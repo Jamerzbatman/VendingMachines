@@ -58,12 +58,7 @@
     const leadsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const leadsSocket = new WebSocket(leadsProtocol + '://' + window.location.host + '/ws/leads/');
 
-    leadsSocket.onopen = function(e) {
-        console.log('✅ WebSocket connected.');
-    };
-
     leadsSocket.onmessage = function(e) {
-        console.log('📥 WebSocket message received:', e.data);  
         const data = JSON.parse(e.data);
 
         if (data.type === 'lead_changed') {
@@ -84,9 +79,6 @@
         }
     };
 
-    leadsSocket.onclose = function(e) {
-        console.error('❌ WebSocket closed unexpectedly');
-    };
 
 
 $(document).ready(function () {

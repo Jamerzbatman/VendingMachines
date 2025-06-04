@@ -28,7 +28,11 @@
                     {% if user.is_authenticated %}
                         {% include 'dashboard/sidebar.html' %}
                         <div id="live-logs" style="position: fixed; top: 106px; right: 2px; width: 300px;  background: transparent; color: #0f0; font-size: 10px; font-family: monospace;  overflow-y: auto; padding: 10px; border: none; z-index: 9999;">
-                            <div id="log-messages"></div>
+                            <div id="log-messages">
+                                {% for log in recent_logs %}
+                                    <p>{{ log.log_data }}</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     {% endif %}
                     
@@ -39,14 +43,43 @@
             </div>
         </div>
     </div>
-    {% if not user.is_authenticated %}
-      {% include 'pages/footer.html' %}
-    {% endif %}
-<script>
+{% if not user.is_authenticated %}
+    {% include 'pages/footer.html' %}
+{% endif %}
 
+{% if user.is_authenticated %}
+<script>
+const logSocket = new WebSocket('ws://' + window.location.host + '/ws/logs/');
+
+logSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log("WebSocket message received:", data);  // Log the received data
+
+    // Handle the log updates sent from the backend
+    if (data.logs) {
+        const logMessages = data.logs;
+        const logContainer = document.getElementById('log-messages');
+
+        // Loop through and render each log message
+        logMessages.forEach(log => {
+            // Check if the log already exists in the container
+            const existingLog = document.getElementById(`log-${log.id}`);
+
+            // If the log doesn't already exist, create a new log element
+            if (!existingLog) {
+                const logElement = document.createElement('div');
+                logElement.classList.add('log-message');
+                logElement.id = `log-${log.id}`;
+                logElement.innerHTML = `<strong>${log.created_at}</strong>: ${log.message}`;
+                logContainer.appendChild(logElement);
+            }
+        });
+    }
+};
 </script>
 
 
+{% endif %}
 </body>
       {% include 'modals/requestingMachine.html' %}
 

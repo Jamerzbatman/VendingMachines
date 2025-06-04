@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'celery',
     'channels',
     'pages',
     'businesses',
@@ -59,8 +60,21 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)]
+            "hosts": [("localhost", 6379)],
+            "capacity": 5000, 
+            "expiry": 60 * 5
         },
+    },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Use Redis as the message broker
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'update_recent_logs_every_10_seconds': {
+        'task': 'logs.tasks.update_recent_logs',
+        'schedule': 10.0,  # Run the task every 10 seconds
     },
 }
 
