@@ -32,3 +32,6 @@ EXPOSE 8000
 CMD bash -c "python manage.py migrate --noinput && \
              python manage.py collectstatic --noinput && \
              daphne -b 0.0.0.0 -p \$PORT main.asgi:application"
+
+
+             
