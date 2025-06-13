@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-^g@s#l(b6q06lk%lr&7eg4chvdedlaxj$*#afo2kttrpk8&3tn
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "snackranger.com",   
     "192.168.1.85",      # IP of your dev box or VM
     "127.0.0.1",         # loopback
-    "localhost",         # handy for some tools/browsers
 ]
 
 
