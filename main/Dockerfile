@@ -1,42 +1,34 @@
-# ─────────────────────────────────────────────────────────
-# Dockerfile – drop this in the project root directory
-# ─────────────────────────────────────────────────────────
+#############################################
+# Dockerfile – works for Django + Channels  #
+#############################################
+
 # 1. Base image
 FROM python:3.12-slim
 
-# 2. Minimal sane env settings
+# 2. Environment sanity
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PORT=8000             
+    PIP_NO_CACHE_DIR=1
 
-# 3. OS-level packages your project is likely to need
+# 3. OS-level deps
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc build-essential netcat && \
+    apt-get install -y --no-install-recommends gcc build-essential && \
     rm -rf /var/lib/apt/lists/*
 
-# 4. Create an unprivileged user (good container hygiene)
-RUN addgroup --system app && adduser --system --group app
-USER app
+# 4. App code
 WORKDIR /app
-
-# 5. Install Python deps
-COPY --chown=app:app requirements.txt .
+COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
+COPY . .
 
-# 6. Copy project code
-COPY --chown=app:app . .
-
-# 7. Expose port (handy for local docker run)
+# 5. Expose a port for local docker run (DO will override with $PORT)
 EXPOSE 8000
 
-# 8. Optionally probe health (DELETE if you don’t have a 200 / route)
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=4 \
-  CMD curl -f http://localhost:${PORT:-8000}/ || exit 1
-
-# 9. One-liner that handles migrations, static files, **and** starts Daphne
-CMD bash -c "
-  python manage.py migrate --noinput &&
-  python manage.py collectstatic --noinput &&
-  daphne -b 0.0.0.0 -p \$PORT main.asgi:application
-"
+# 6. One-liner that:
+#    • applies migrations
+#    • collects static files
+#    • starts Daphne on whatever port DO injects
+# NOTE: replace `mysite` with your Django project folder name if different.
+CMD bash -c "python manage.py migrate --noinput && \
+             python manage.py collectstatic --noinput && \
+             daphne -b 0.0.0.0 -p \$PORT mysite.asgi:application"
