@@ -31,4 +31,4 @@ EXPOSE 8000
 # NOTE: replace `mysite` with your Django project folder name if different.
 CMD bash -c "python manage.py migrate --noinput && \
              python manage.py collectstatic --noinput && \
-             daphne -b 0.0.0.0 -p \$PORT mysite.asgi:application"
+             daphne -b 0.0.0.0 -p \$PORT main.asgi:application"
