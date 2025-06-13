@@ -7,12 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^g@s#l(b6q06lk%lr&7eg4chvdedlaxj$*#afo2kttrpk8&3tn'
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+print(DEBUG)
 
 if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.1.85"]
 else:
     ALLOWED_HOSTS = ["snackranger.com", "www.snackranger.com"]
-
+print(ALLOWED_HOSTS)
 db_url = os.getenv("DATABASE_URL")
 
 if db_url:
