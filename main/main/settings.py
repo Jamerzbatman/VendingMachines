@@ -27,11 +27,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "snackranger.com",   
-    "192.168.1.85",      # IP of your dev box or VM
-    "127.0.0.1",         # loopback
+    "www.snackranger.com",
+    "192.168.1.85",      
+    "127.0.0.1",      
 ]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://snackranger.com",
+    "https://www.snackranger.com",
+    # wildcard works on Django 4.1+: "https://*.snackranger.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
