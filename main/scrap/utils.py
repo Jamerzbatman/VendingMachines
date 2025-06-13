@@ -1,14 +1,11 @@
 # scrap/utils.py
 
-from logs.views import add_log
-
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import re
 
 def get_rendered_html(user, job_id, linked_log, url):
     # Log the start of the HTML rendering process
-    add_log(job_id, "Gold", f"🚀 Starting HTML rendering for URL: {url}.", "long", user, linked_log)
 
     try:
         # Start Playwright and navigate to the page
@@ -25,7 +22,6 @@ def get_rendered_html(user, job_id, linked_log, url):
             page = context.new_page()
             
             # Log when setting extra headers
-            add_log(job_id, "Gold", f"🔍 Setting headers and navigating to {url}.", "long", user, linked_log)
             
             page.set_extra_http_headers({
                 "Accept-Language": "en-US,en;q=0.9",
@@ -35,19 +31,16 @@ def get_rendered_html(user, job_id, linked_log, url):
             page.wait_for_timeout(7000)  # wait 7 seconds for any async JS
             
             # Log when the page is loaded and waiting for content
-            add_log(job_id, "Gold", f"✅ Page loaded for URL: {url}. Waiting for async JS to render.", "long", user, linked_log)
             
             html = page.content()
 
             # Log successful HTML retrieval
-            add_log(job_id, "Gold", f"🌐 Successfully rendered HTML for URL: {url}.", "long", user, linked_log)
             
             browser.close()
             return html
     
     except Exception as e:
         # Log any errors that occur during the process
-        add_log(job_id, "Bronze", f"[Playwright Error] {e} while rendering {url}.", "long", user, linked_log)
         return ""
     
 

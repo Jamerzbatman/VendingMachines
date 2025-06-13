@@ -1,0 +1,125 @@
+{% extends "phones/base.html" %}
+
+{% block title %}Boutique & Roadside Hotels – Snack Ranger{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-gray-900 text-white text-center py-10 px-4">
+  <h1 class="text-3xl font-extrabold leading-tight">
+    Turn an Empty Wall into a 24/7 Micro‑Convenience Store
+  </h1>
+  <p class="mt-4 text-lg max-w-prose mx-auto">
+    Delight guests, drive revenue, and skip the staffing headache with our wall‑mounted “Mini‑Mart” vending system.
+  </p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block mt-6 rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Bring Snack Ranger to My Hotel
+  </a>
+</section>
+
+<!-- WHY HOTELS LOVE IT -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 space-y-6">
+  <h2 class="text-2xl font-semibold text-center">Made for Independent &amp; Roadside Properties</h2>
+  <ul class="space-y-4 text-left text-base">
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="compact">📏</span><span>Tiny footprint: mounts flush to any hallway, lobby, or snack nook wall.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="gear">⚙️</span><span>We handle install, restocks, and remote monitoring so you don’t lift a finger.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="paint palette">🎨</span><span>Custom face‑graphics that match your brand vibe, from desert chic to retro neon.</span></li>
+  </ul>
+</section>
+
+<!-- CURATED MIX -->
+<section class="bg-gray-100 dark:bg-gray-800 py-10 px-4 space-y-8">
+  <h2 class="text-2xl font-semibold text-center">What’s Inside the Mini‑Mart?</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-semibold text-primary">Forgot‑Your‑Tech Essentials</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>USB‑C &amp; Lightning cables</li>
+        <li>20 W fast‑charge wall bricks</li>
+        <li>5 k mAh power banks</li>
+        <li>Wired earbuds</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary">Personal Care Basics</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Toothbrush &amp; paste kits</li>
+        <li>Razor + shave‑gel minis</li>
+        <li>Deodorant wipes &amp; lip balm</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary">Comfort &amp; Wellness</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Ear plugs &amp; silk eye masks</li>
+        <li>Breath‑fresh strips</li>
+        <li>Stain‑removal pens</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary">Discreet Necessities</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Condoms &amp; premium lubricant sachets</li>
+        <li>Feminine pads/tampons two‑packs</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary">Quick‑Fuel Snacks</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>RXBAR mini high‑protein bars</li>
+        <li>Almond 1‑oz packs</li>
+        <li>Zero‑sugar energy shots</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COFFEE MODULE -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 flex flex-col gap-6">
+  <h2 class="text-2xl font-semibold">Add a Self‑Serve 12 oz Hot Coffee Station</h2>
+  <p class="text-base">Upgrade your lobby experience with our compact coffee module: fresh‑brewed, single‑touch, and cashless. Perfect for late check‑ins, early departures, or anytime guests need a warm pick‑me‑up.</p>
+  <div class="text-6xl text-primary text-center" role="img" aria-label="coffee">☕️</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="bg-gray-100 dark:bg-gray-800 py-10 px-4">
+  <h2 class="text-2xl font-semibold text-center mb-6">How the Partnership Works</h2>
+  <div class="grid gap-8">
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="phone">📞</div>
+      <h3 class="font-semibold">Step 1</h3>
+      <p class="text-base">Schedule a quick site walkthrough (virtual or onsite).</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="box">📦</div>
+      <h3 class="font-semibold">Step 2</h3>
+      <p class="text-base">We mount, brand, and stock the machine in under 60 minutes.</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="shield">🛡️</div>
+      <h3 class="font-semibold">Step 3</h3>
+      <p class="text-base">We monitor, restock, and service while you collect revenue share — zero hassle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 text-center space-y-4">
+  <h2 class="text-2xl font-semibold">Ready to Elevate Guest Convenience?</h2>
+  <p class="text-base">Request a free consultation and see how Snack Ranger can transform unused wall space into steady revenue.</p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Book My Consultation
+  </a>
+</section>
+
+{% endblock %}

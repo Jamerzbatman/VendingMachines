@@ -1,48 +1,60 @@
 {% load static %}
 <footer class="bg-dark text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Logo and About -->
-            <div class="col-md-4 mb-4 mb-md-0 text-center text-md-start">
-                <img src="{% static 'images/logos/smallSnacRanger.png' %}" alt="Snack Ranger Logo" style="height: 110px; width: auto; margin-bottom: 1rem;">
-                <p class="fs-6 fw-light" style="max-width: 280px; line-height: 1.4;">
-                    Cutting-edge, fully managed vending solutions tailored for your business. Smart. Reliable. Always stocked.
-                </p>
-            </div>
+  <div class="container">
+    <!-- Top Row: Logo + Links + Industries -->
+    <div class="row">
+      <!-- Logo and About -->
+      <div class="col-md-4 mb-4 text-center text-md-start">
+        <img src="{% static 'images/logos/smallSnacRanger.png' %}" alt="Snack Ranger Logo" style="height: 110px; width: auto; margin-bottom: 1rem;">
+        <p class="fs-6 fw-light" style="max-width: 280px; line-height: 1.4;">
+          Cutting-edge, fully managed vending solutions tailored for your business. Smart. Reliable. Always stocked.
+        </p>
+      </div>
 
-            <!-- Quick Links -->
-            <div class="col-md-4 mb-4 mb-md-0">
-                <h5 class="fw-bold mb-3">Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li><a href="/" class="text-white text-decoration-none hover-underline">Home</a></li>
-                    <li><a href="{% url 'learnMore' %}" class="text-white text-decoration-none hover-underline">Learn More</a></li>
-                    <li><a href="{% url 'aboutUs' %}" class="text-white text-decoration-none hover-underline">About Us</a></li>
-                    <li><a href="{% url 'sellToUs' %}" class="text-white text-decoration-none hover-underline">Sell To Us</a></li>
-                    <li><a href="{% url 'terms' %}" class="text-white text-decoration-none hover-underline">Terms & Conditions</a></li>
-                    <li><a href="{% url 'privacy' %}" class="text-white text-decoration-none hover-underline">Privacy Policy</a></li>
-                </ul>
-            </div>
+      <!-- Quick Links -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="/" class="text-white text-decoration-none hover-underline">Home</a></li>
+          <li><a href="{% url 'learnMore' %}" class="text-white text-decoration-none hover-underline">Learn More</a></li>
+          <li><a href="{% url 'aboutUs' %}" class="text-white text-decoration-none hover-underline">About Us</a></li>
+          <li><a href="{% url 'sellToUs' %}" class="text-white text-decoration-none hover-underline">Sell To Us</a></li>
+          <li><a href="{% url 'terms' %}" class="text-white text-decoration-none hover-underline">Terms &amp; Conditions</a></li>
+          <li><a href="{% url 'privacy' %}" class="text-white text-decoration-none hover-underline">Privacy Policy</a></li>
+        </ul>
+      </div>
 
-            <!-- Contact Info -->
-            <div class="col-md-4 text-center text-md-start">
-                <h5 class="fw-bold mb-3">Contact Us</h5>
-                <p class="mb-1">Email: <a href="mailto:info@snackranger.com" class="text-white text-decoration-none hover-underline">info@snackranger.com</a></p>
-                <p class="mb-3">Phone: (123) 456-7890</p>
-                <div>
-                    <a href="https://facebook.com" target="_blank" class="text-white mx-2 fs-4" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="https://linkedin.com" target="_blank" class="text-white mx-2 fs-4" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                </div>
-            </div>
+      <!-- Industries We Serve -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3">Industries We Serve</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'officeBuildings' %}" class="text-white text-decoration-none hover-underline">Office Buildings</a></li>
+          <li><a href="{% url 'boutiqueHotels' %}" class="text-white text-decoration-none hover-underline">Boutique &amp; Roadside Hotels</a></li>
+          <li><a href="{% url 'largeHotels' %}" class="text-white text-decoration-none hover-underline">Large Hotels &amp; Resorts</a></li>
+        </ul>
+      </div>
+    </div><!-- /.row -->
+
+    <!-- Contact Row: Bottom Center -->
+    <div class="row justify-content-center mt-3">
+      <div class="col-lg-6 text-center">
+        <h5 class="fw-bold mb-3">Contact Us</h5>
+        <p class="mb-1">Email: <a href="mailto:info@snackranger.com" class="text-white text-decoration-none hover-underline">info@snackranger.com</a> Phone: (123) 456-7890</p>
+        <div>
+          <a href="https://facebook.com" target="_blank" class="text-white mx-2 fs-4" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://linkedin.com" target="_blank" class="text-white mx-2 fs-4" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
         </div>
+      </div>
+    </div><!-- /.row -->
 
-        <hr class="border-secondary my-4">
+    <hr class="border-secondary my-4">
 
-        <div class="row">
-            <div class="col text-center">
-                <p class="mb-0 fs-7 fw-light">© 2025 Snack Ranger. All rights reserved.</p>
-            </div>
-        </div>
+    <div class="row">
+      <div class="col text-center">
+        <p class="mb-0 fs-7 fw-light">© 2025 Snack Ranger. All rights reserved.</p>
+      </div>
     </div>
+  </div>
 </footer>
 
 <style>

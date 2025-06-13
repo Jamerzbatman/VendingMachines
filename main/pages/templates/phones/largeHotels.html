@@ -1,0 +1,113 @@
+{% extends "phones/base.html" %}
+
+{% block title %}Large Hotels & Resorts – Snack Ranger{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-gray-900 text-white text-center py-10 px-4">
+  <h1 class="text-3xl font-extrabold leading-tight">
+    Round‑the‑Clock Refreshment for Every Guest Wing
+  </h1>
+  <p class="mt-4 text-lg max-w-prose mx-auto">
+    Bar‑quality coffee, ice‑cold beverages, crave‑worthy snacks, and travel essentials—each in its own smart machine, monitored and restocked by Snack Ranger.
+  </p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block mt-6 rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Schedule a Site Walkthrough
+  </a>
+</section>
+
+<!-- WHY LARGE HOTELS CHOOSE US -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 space-y-6">
+  <h2 class="text-2xl font-semibold text-center">Built for High‑Volume Properties</h2>
+  <ul class="space-y-4 text-left text-base">
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="guests">👥</span><span>Handles thousands of guests with real‑time stock monitoring and auto‑dispatch restocks.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="layers">🗂️</span><span>Separate machines for coffee, cold drinks, snacks, and convenience items—each category always optimally curated.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="credit card">💳</span><span>100% cashless tap‑to‑pay—reduces queues and eliminates bill jams.</span></li>
+  </ul>
+</section>
+
+<!-- MACHINE LINEUP -->
+<section class="bg-gray-100 dark:bg-gray-800 py-10 px-4 space-y-8">
+  <h2 class="text-2xl font-semibold text-center">Our Four‑Machine Lineup</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="coffee">☕️</span>12 oz Coffee Station</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Fresh‑ground medium &amp; dark roast coffee</li>
+        <li>Hot chocolate &amp; chai latte</li>
+        <li>Specialty teas (green, herbal, black)</li>
+        <li>Non‑dairy creamer &amp; flavored syrups</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="cold drink">🥤</span>Cold Drink Machine</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Bottled still &amp; sparkling water (500 ml)</li>
+        <li>Flavored seltzers &amp; craft sodas</li>
+        <li>Sports drinks &amp; iced teas</li>
+        <li>Energy drinks (regular &amp; zero‑sugar)</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="snack">🍿</span>Snack Machine</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Kettle &amp; traditional potato chips</li>
+        <li>Protein bars (RXBAR, Clif)</li>
+        <li>Trail mix &amp; almond packs</li>
+        <li>Cookies, candy, vegan &amp; gluten‑free options</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="bag">🛍️</span>Convenience Machine</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>USB‑C &amp; Lightning cables, 20 W chargers, 10 k mAh power banks</li>
+        <li>Toothbrush kits, razor + shave‑gel minis, deodorant wipes</li>
+        <li>Stain‑removal pens, breath‑fresh strips, eye masks &amp; ear plugs</li>
+        <li>Condoms, feminine care two‑packs, premium lubricant sachets</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="mx-auto max-w-screen-sm py-10 px-4">
+  <h2 class="text-2xl font-semibold text-center mb-6">How It Works</h2>
+  <div class="grid gap-8">
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="door">🚪</div>
+      <h3 class="font-semibold">Step 1</h3>
+      <p class="text-base">Book a walkthrough to identify optimal machine placements.</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="hammer">🔨</div>
+      <h3 class="font-semibold">Step 2</h3>
+      <p class="text-base">We deliver, install, and brand all machines with zero CAPEX.</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="cloud">☁️</div>
+      <h3 class="font-semibold">Step 3</h3>
+      <p class="text-base">Our cloud dashboard tracks inventory; our team refills and services proactively.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 text-center space-y-4">
+  <h2 class="text-2xl font-semibold">Upgrade Guest Convenience Today</h2>
+  <p class="text-base">Let’s design a fleet that fits your property’s scale and style. Get in touch for a no‑obligation consultation.</p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Request Consultation
+  </a>
+</section>
+
+{% endblock %}

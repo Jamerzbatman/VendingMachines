@@ -1,0 +1,104 @@
+{% extends "phones/base.html" %}
+
+{% block title %}Office Buildings – Snack Ranger{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-gray-900 text-white text-center py-10 px-4">
+  <h1 class="text-3xl font-extrabold leading-tight">
+    Fuel Productivity, One Tap at a Time
+  </h1>
+  <p class="mt-4 text-lg max-w-prose mx-auto">
+    Combo snack‑and‑drink machines, bar‑quality coffee stations, and compact convenience kiosks—installed, stocked, and serviced by Snack Ranger.
+  </p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block mt-6 rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Book a Lobby Walkthrough
+  </a>
+</section>
+
+<!-- WHY OFFICES CHOOSE US -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 space-y-6">
+  <h2 class="text-2xl font-semibold text-center">Built for Modern Workflows</h2>
+  <ul class="space-y-4 text-left text-base">
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="chart">📈</span><span>Boosts productivity—no more long coffee or snack runs off‑site.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="clock">⏰</span><span>24/7 self‑service for late nights and weekend sprints.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="credit card">💳</span><span>Cashless tap‑to‑pay keeps lines moving and maintenance low.</span></li>
+    <li class="flex gap-3"><span class="text-2xl" role="img" aria-label="bounding box">📦</span><span>Compact footprint: each kiosk fits neatly in break rooms, lobbies, or shared corridors.</span></li>
+  </ul>
+</section>
+
+<!-- MACHINE LINEUP -->
+<section class="bg-gray-100 dark:bg-gray-800 py-10 px-4 space-y-8">
+  <h2 class="text-2xl font-semibold text-center">Three‑Machine Solution</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="basket">🧺</span>Combo Snack + Cold Drink</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Bottled water, flavored seltzers, craft sodas</li>
+        <li>Zero‑sugar energy drinks &amp; iced teas</li>
+        <li>Protein bars (Clif, RXBAR), nut packs, trail mix</li>
+        <li>Potato chips, pretzels, cookies, gluten‑free options</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="coffee">☕️</span>12 oz Coffee Station</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>Fresh‑ground medium &amp; dark roast coffee</li>
+        <li>Hot chocolate &amp; chai latte</li>
+        <li>Assorted teas (green, black, herbal)</li>
+        <li>Dairy &amp; non‑dairy creamers, flavored syrups</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-semibold text-primary flex items-center gap-2"><span role="img" aria-label="bag">🛍️</span>Convenience Kiosk</h3>
+      <ul class="list-disc list-inside text-base mt-2 space-y-1">
+        <li>USB‑C &amp; Lightning cables, 20 W chargers, 10 k mAh power banks</li>
+        <li>Wired earbuds, screen‑cleaner wipes</li>
+        <li>Toothbrush kits, deodorant wipes, breath strips</li>
+        <li>Sewing kit, stain‑removal pen, lint roller</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="mx-auto max-w-screen-sm py-10 px-4">
+  <h2 class="text-2xl font-semibold text-center mb-6">Simple, Hands‑Off Partnership</h2>
+  <div class="grid gap-8">
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="building">🏢</div>
+      <h3 class="font-semibold">Step 1</h3>
+      <p class="text-base">Select break rooms or lobby zones—we’ll verify power and clearance.</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="truck">🚚</div>
+      <h3 class="font-semibold">Step 2</h3>
+      <p class="text-base">We deliver, install, and load machines in under an hour.</p>
+    </div>
+    <div class="text-center space-y-2">
+      <div class="text-4xl" role="img" aria-label="cloud">☁️</div>
+      <h3 class="font-semibold">Step 3</h3>
+      <p class="text-base">Real‑time inventory monitoring triggers automatic restocks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="mx-auto max-w-screen-sm py-10 px-4 text-center space-y-4">
+  <h2 class="text-2xl font-semibold">Ready to Keep the Team Energized?</h2>
+  <p class="text-base">Transform unused corners into productivity hubs. Request a free site assessment today.</p>
+  <a
+    href="{% url 'Walkthrough' %}"
+    class="inline-block rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg transition active:scale-95"
+  >
+    Request Assessment
+  </a>
+</section>
+
+{% endblock %}

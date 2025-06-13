@@ -1,0 +1,134 @@
+{% extends "phones/base.html" %}
+
+{% block title %}Book a Walkthrough – Snack Ranger{% endblock %}
+
+{% block content %}
+<section class="py-10 px-4 max-w-screen-sm mx-auto space-y-6">
+  <h1 class="text-3xl font-bold text-center">Get Your Free Site Walkthrough</h1>
+  <p class="text-base text-center">Answer a few quick questions. It takes <strong>&lt; 60&nbsp;seconds</strong>.</p>
+
+  <!-- Submit directly to the Django endpoint that saves leads -->
+  <form action="{% url 'submitBrochuresLead' %}" method="post" id="walkthroughForm" class="space-y-8">
+    {% csrf_token %}
+
+    <!-- ===================== STEP 1 : Contact ===================== -->
+    <fieldset data-step="1" class="step space-y-4">
+      <legend class="sr-only">Contact Info</legend>
+      <input type="text" name="firstName" placeholder="First Name" required class="input-field" />
+      <input type="text" name="lastName" placeholder="Last Name" required class="input-field" />
+      <input type="tel" name="phone" placeholder="Your Phone (optional)" class="input-field" />
+      <input type="email" name="email" placeholder="Email" required class="input-field" />
+    </fieldset>
+
+    <!-- ===================== STEP 2 : Company ===================== -->
+    <fieldset data-step="2" class="step space-y-4 hidden">
+      <legend class="sr-only">Company Info</legend>
+      <input type="text" name="companyName" placeholder="Company Name" required class="input-field" />
+      <!-- Optional separate company phone -->
+      <input type="tel" name="companyPhone" placeholder="Company Phone (optional)" class="input-field" />
+      <input type="text" name="address" placeholder="Street Address" required class="input-field" id="addressField" autocomplete="off" />
+    </fieldset>
+
+    <!-- ===================== STEP 3 : Walkthrough Details ===================== -->
+    <fieldset data-step="3" class="step space-y-4 hidden">
+      <legend class="sr-only">Walkthrough Details</legend>
+      <input type="number" name="numMachines" placeholder="Number of Machines" min="1" required class="input-field" />
+      <input type="datetime-local" name="setupTime" required class="input-field" />
+
+      <!-- Hidden lat/lon auto‑filled from address / geo -->
+      <input type="hidden" name="latitude" id="latField" />
+      <input type="hidden" name="longitude" id="lonField" />
+    </fieldset>
+
+    <!-- ======== NAVIGATION BUTTONS ======== -->
+    <div class="flex justify-between">
+      <button type="button" id="backBtn" class="rounded-lg px-4 py-2 font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hidden">Back</button>
+      <button type="button" id="nextBtn" class="ml-auto rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg">Next</button>
+      <button type="submit" id="submitBtn" class="ml-auto rounded-lg px-6 py-3 font-medium bg-primary text-white shadow-lg hidden">Submit</button>
+    </div>
+  </form>
+
+  <p id="locationStatus" class="text-xs text-center text-gray-500"></p>
+</section>
+
+{% block extra_js %}
+{% if google_api_key %}
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initAutocomplete" async defer></script>
+{% endif %}
+<script>
+  // ===== Tailwind helper styling =====
+  document.querySelectorAll('.input-field').forEach(el => {
+    el.classList.add('w-full','rounded-lg','border','border-gray-300','px-4','py-3','text-base','bg-white','dark:bg-gray-800','dark:border-gray-700');
+  });
+
+  // ===== Multi‑step logic =====
+  const steps = Array.from(document.querySelectorAll('.step'));
+  let currentStep = 0;
+  const nextBtn = document.getElementById('nextBtn');
+  const backBtn = document.getElementById('backBtn');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function showStep(index) {
+    steps.forEach((step, i) => step.classList.toggle('hidden', i !== index));
+    backBtn.classList.toggle('hidden', index === 0);
+    nextBtn.classList.toggle('hidden', index === steps.length - 1);
+    submitBtn.classList.toggle('hidden', index !== steps.length - 1);
+    validateStep();
+  }
+
+  function validateStep() {
+    const inputs = steps[currentStep].querySelectorAll('input,select');
+    let allValid = true;
+    inputs.forEach(inp => { if (!inp.checkValidity()) allValid = false; });
+    nextBtn.disabled = !allValid;
+    submitBtn.disabled = !allValid;
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (nextBtn.disabled) return;
+    currentStep = Math.min(currentStep + 1, steps.length - 1);
+    showStep(currentStep);
+  });
+
+  backBtn.addEventListener('click', () => {
+    currentStep = Math.max(currentStep - 1, 0);
+    showStep(currentStep);
+  });
+
+  steps.forEach(step => step.addEventListener('input', validateStep));
+  document.addEventListener('DOMContentLoaded', () => showStep(currentStep));
+
+  // ===== Geolocation fallback (fills lat/lon on load) =====
+  const statusEl = document.getElementById('locationStatus');
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        document.getElementById('latField').value = pos.coords.latitude;
+        document.getElementById('lonField').value = pos.coords.longitude;
+      },
+      () => { statusEl.textContent = "Location access denied – that’s okay, just make sure your address is correct."; }
+    );
+  }
+
+  // ===== Google Places Autocomplete =====
+  function initAutocomplete() {
+    const addressInput = document.getElementById('addressField');
+    if (!addressInput) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+      types: ['address'],
+      componentRestrictions: { country: ['us','ca'] },
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        document.getElementById('latField').value = place.geometry.location.lat();
+        document.getElementById('lonField').value = place.geometry.location.lng();
+      }
+    });
+  }
+</script>
+{% endblock %}
+
+{% endblock %}

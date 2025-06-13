@@ -1,0 +1,96 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Office Buildings – Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-dark text-white text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Fuel Productivity, One Tap at a Time</h1>
+    <p class="lead mt-3">Combo snack‑and‑drink machines, bar‑quality coffee stations, and compact convenience kiosks—installed, stocked, and serviced by Snack Ranger.</p>
+    <button type="button" class="btn btn-primary btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+      Book a Lobby Walkthrough
+    </button>
+  </div>
+</section>
+
+<!-- Why Offices Choose Snack Ranger -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-3">Built for Modern Workflows</h2>
+  <ul class="list-unstyled fs-5">
+    <li class="d-flex mb-3"><i class="bi bi-graph-up text-success fs-3 me-3"></i>Boosts productivity—no more long coffee or snack runs off‑site.</li>
+    <li class="d-flex mb-3"><i class="bi bi-clock-history text-info fs-3 me-3"></i>24/7 self‑service for late nights and weekend sprints.</li>
+    <li class="d-flex mb-3"><i class="bi bi-credit-card-2-front text-warning fs-3 me-3"></i>Cashless tap‑to‑pay keeps lines moving and maintenance low.</li>
+    <li class="d-flex mb-3"><i class="bi bi-bounding-box text-danger fs-3 me-3"></i>Compact footprint: each kiosk fits neatly in break rooms, lobbies, or shared corridors.</li>
+  </ul>
+</section>
+
+<!-- Machine Lineup -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-4">Three‑Machine Solution</h2>
+  <div class="row gy-5">
+    <!-- Combo Machine -->
+    <div class="col-md-4">
+      <h3 class="text-info"><i class="bi bi-basket2-fill me-2"></i>Combo Snack + Cold Drink</h3>
+      <ul class="fs-6 ms-3">
+        <li>Bottled water, flavored seltzers, craft sodas</li>
+        <li>Zero‑sugar energy drinks & iced teas</li>
+        <li>Protein bars (Clif, RXBAR), nut packs, trail mix</li>
+        <li>Potato chips, pretzels, cookies, gluten‑free options</li>
+      </ul>
+    </div>
+    <!-- Coffee Station -->
+    <div class="col-md-4">
+      <h3 class="text-info"><i class="bi bi-cup-hot me-2"></i>12 oz Coffee Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Fresh‑ground medium & dark roast coffee</li>
+        <li>Hot chocolate & chai latte</li>
+        <li>Assorted teas (green, black, herbal)</li>
+        <li>Dairy & non‑dairy creamers, flavored syrups</li>
+      </ul>
+    </div>
+    <!-- Convenience Kiosk -->
+    <div class="col-md-4">
+      <h3 class="text-info"><i class="bi bi-bag-check-fill me-2"></i>Convenience Kiosk</h3>
+      <ul class="fs-6 ms-3">
+        <li>USB‑C & Lightning cables, 20 W chargers, 10 k mAh power banks</li>
+        <li>Wired earbuds, screen‑cleaner wipes</li>
+        <li>Toothbrush kits, deodorant wipes, breath strips</li>
+        <li>Sewing kit, stain‑removal pen, lint roller</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark">
+  <h2 class="text-center mb-4">Simple, Hands‑Off Partnership</h2>
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-building fs-2 text-success"></i>
+      <h4 class="mt-2">Step 1</h4>
+      <p>Select break rooms or lobby zones—we’ll verify power and clearance.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-truck fs-2 text-success"></i>
+      <h4 class="mt-2">Step 2</h4>
+      <p>We deliver, install, and load machines in under an hour.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-cloud-check fs-2 text-success"></i>
+      <h4 class="mt-2">Step 3</h4>
+      <p>Real‑time inventory monitoring triggers automatic restocks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark text-center">
+  <h2 class="mb-4">Ready to Keep the Team Energized?</h2>
+  <p class="fs-5">Transform unused corners into productivity hubs. Request a free site assessment today.</p>
+  <button type="button" class="btn btn-primary btn-lg mx-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+    Request Assessment
+  </button>
+</section>
+
+{% endblock %}

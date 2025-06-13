@@ -1,0 +1,105 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Large Hotels & Resorts – Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-dark text-white text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Round‑the‑Clock Refreshment for Every Guest Wing</h1>
+    <p class="lead mt-3">Bar‑quality coffee, ice‑cold beverages, crave‑worthy snacks, and travel essentials—each in its own smart machine, monitored and restocked by Snack Ranger.</p>
+    <button type="button" class="btn btn-primary btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+      Schedule a Site Walkthrough
+    </button>
+  </div>
+</section>
+
+<!-- Why Large Hotels Choose Us -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-3">Built for High‑Volume Properties</h2>
+  <ul class="list-unstyled fs-5">
+    <li class="d-flex mb-3"><i class="bi bi-people-fill text-success fs-3 me-3"></i>Handles thousands of guests with real‑time stock monitoring and auto‑dispatch restocks.</li>
+    <li class="d-flex mb-3"><i class="bi bi-layers text-info fs-3 me-3"></i>Separate machines for coffee, cold drinks, snacks, and convenience items—so each category is always optimally curated.</li>
+    <li class="d-flex mb-3"><i class="bi bi-credit-card-2-front text-warning fs-3 me-3"></i>100% cashless tap‑to‑pay—reduces queues and eliminates bill jams.</li>
+  </ul>
+</section>
+
+<!-- Machine Lineup & Stock Lists -->
+<section class="container my-5 section-dark">
+  <h2 class="mb-4">Our Four‑Machine Lineup</h2>
+  <div class="row gy-5">
+    <!-- Coffee Machine -->
+    <div class="col-md-6">
+      <h3 class="text-info"><i class="bi bi-cup-hot me-2"></i>12 oz Coffee Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Fresh‑ground medium & dark roast coffee</li>
+        <li>Hot chocolate & chai latte</li>
+        <li>Specialty teas (green, herbal, black)</li>
+        <li>Non‑dairy creamer & flavored syrups</li>
+      </ul>
+    </div>
+    <!-- Cold Drinks -->
+    <div class="col-md-6">
+      <h3 class="text-info"><i class="bi bi-droplet-half me-2"></i>Cold Drink Machine</h3>
+      <ul class="fs-6 ms-3">
+        <li>Bottled still & sparkling water (500 ml)</li>
+        <li>Flavored seltzers & craft sodas</li>
+        <li>Sports drinks & iced teas</li>
+        <li>Energy drinks (regular & zero‑sugar)</li>
+      </ul>
+    </div>
+    <!-- Snacks -->
+    <div class="col-md-6">
+      <h3 class="text-info"><i class="bi bi-basket-fill me-2"></i>Snack Machine</h3>
+      <ul class="fs-6 ms-3">
+        <li>Kettle & traditional potato chips</li>
+        <li>Protein bars (RXBAR, Clif)</li>
+        <li>Trail mix & almond packs</li>
+        <li>Cookies, candy, and vegan/gluten‑free options</li>
+      </ul>
+    </div>
+    <!-- Convenience -->
+    <div class="col-md-6">
+      <h3 class="text-info"><i class="bi bi-bag-check-fill me-2"></i>Convenience Machine</h3>
+      <ul class="fs-6 ms-3">
+        <li>USB‑C & Lightning cables, 20 W wall chargers, 10 k mAh power banks</li>
+        <li>Toothbrush kits, razor + shave‑gel minis, deodorant wipes</li>
+        <li>Stain‑removal pens, breath‑fresh strips, eye masks & ear plugs</li>
+        <li>Condoms, feminine care two‑packs, premium lubricant sachets</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark">
+  <h2 class="text-center mb-4">How It Works</h2>
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-door-open fs-2 text-success"></i>
+      <h4 class="mt-2">Step 1</h4>
+      <p>Book a walkthrough to identify optimal machine placements.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-hammer fs-2 text-success"></i>
+      <h4 class="mt-2">Step 2</h4>
+      <p>We deliver, install, and brand all machines with zero CAPEX.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-cloud-check fs-2 text-success"></i>
+      <h4 class="mt-2">Step 3</h4>
+      <p>Our cloud dashboard tracks inventory; our team refills and services proactively.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark text-center">
+  <h2 class="mb-4">Upgrade Guest Convenience Today</h2>
+  <p class="fs-5">Let’s design a fleet that fits your property’s scale and style. Get in touch for a no‑obligation consultation.</p>
+  <button type="button" class="btn btn-primary btn-lg mx-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+    Request Consultation
+  </button>
+</section>
+
+{% endblock %}

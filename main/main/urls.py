@@ -29,10 +29,18 @@ urlpatterns = [
     path('Reports/', page.reports, name='reports'),
     path('Settings/', page.settings, name='settings'),
     path('About-Us/', page.aboutUs, name='aboutUs'),
+    path('Office-Buildings/', page.officeBuildings, name='officeBuildings'),
+    path('Boutique-Hotels/', page.boutiqueHotels, name='boutiqueHotels'),
+    path('Large-Hotels/', page.largeHotels, name='largeHotels'),
 
+    path('Phone/Office-Buildings/', page.phoneOfficeBuildings, name='PhoneOfficeBuildings'),
+    path('Phone/Boutique-Hotels/', page.phoneBoutiqueHotels, name='PhoneBoutiqueHotels'),
+    path('Phone/Large-Hotels/', page.phoneLargeHotels, name='PhoneLargeHotels'),
+    path('Phone/Walkthrough/', page.walkthrough, name='Walkthrough'),
+    path('Phone/Privacy/', page.phonePrivacy, name='phonePrivacy'),
 
     path('Min-Short-Logs/', logs.Min_Short_Logs, name='minShortLogs'),
-
+    path('Submit-Brochures-Lead/', leads.submitBrochuresLead, name='submitBrochuresLead'),
     path('submit-webSite-lead/', leads.submitWebSiteLead, name='submitWebSiteLead'),
     path('Generate-Leads/', leads.generate_leads, name='generate_leads'),
     path('leads/results/<uuid:job_id>/', leads.lead_results, name='lead_results'),

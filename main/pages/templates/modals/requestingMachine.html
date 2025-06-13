@@ -22,9 +22,14 @@
               </div>
               <div class="mb-3">
                 <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phone" name="phone" required>
+                <input type="text" class="form-control" id="phone" name="phone">
               </div>
-              <button type="button" class="btn btn-primary" id="nextStep1">Next</button>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email">
+              </div>
+              <button type="button" class="btn btn-primary" id="nextStep1" disabled>Next</button>
             </div>
   
             <!-- Step 2: Company Info -->
@@ -42,9 +47,21 @@
                 <label for="companyPhone" class="form-label">Company Phone Number</label>
                 <input type="text" class="form-control" id="companyPhone" name="companyPhone" required>
               </div>
-              <button type="button" class="btn btn-primary" id="nextStep2">Next</button>
+              <button type="button" class="btn btn-primary" id="nextStep2"disabled>Next</button>
             </div>
-  
+            <!-- Step 2b: Confirm Location (you removed this—put it back) -->
+            <div id="step2Map" style="display:none;">
+              <h4>Confirm Building Location</h4>
+              <p>Drag the pin if the marker isn’t on your building.</p>
+
+              <div id="map" style="height:300px;border-radius:.5rem;"></div>
+
+              <!-- Hidden lat/lng for form submission -->
+              <input type="hidden" id="lat" name="latitude">
+              <input type="hidden" id="lng" name="longitude">
+
+              <button type="button" class="btn btn-primary" id="nextStep2Map">Next</button>
+            </div>    
             <!-- Step 3: Machine Info -->
             <div id="step3" style="display:none;">
               <h4>Machine Information</h4>
@@ -63,41 +80,120 @@
       </div>
     </div>
   </div>
+
+{% if google_api_key %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places"></script>
+{% endif %}
+
 <script>
-    document.getElementById('nextStep1').addEventListener('click', function() {
-        document.getElementById('step1').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
-    });
+/* ---------- Google Places Autocomplete ---------- */
+const addressInput = document.getElementById("address");
+const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+  types: ["address"],
+  componentRestrictions: { country: "us" }
+});
 
-    document.getElementById('nextStep2').addEventListener('click', function() {
-        document.getElementById('step2').style.display = 'none';
-        document.getElementById('step3').style.display = 'block';
-    });
+let map, marker;          // cache them so we don't recreate
 
-    document.getElementById('requestMachineForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+/* ---------- Reusable helper ---------- */
+function gateButton(inputs, button) {
+  const check = () => {
+    const filled = inputs.every(inp => inp.value.trim().length);
+    button.disabled = !filled;
+  };
+  check();                                     // initial run
+  inputs.forEach(inp => inp.addEventListener("input", check));
+}
 
-    // Collect the data
-    var formData = new FormData(this);
+document.addEventListener("DOMContentLoaded", () => {
 
-    // Submit the form data via AJAX
-    fetch("{% url 'submitWebSiteLead' %}", {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+  /* ----- Step 1 gating ----- */
+  const step1Inputs = Array.from(document.querySelectorAll("#step1 input[required]"));
+  const next1 = document.getElementById("nextStep1");
+  gateButton(step1Inputs, next1);
+
+  /* ----- Step 2 gating ----- */
+  const step2Inputs = Array.from(document.querySelectorAll("#step2 input[required]"));
+  const next2 = document.getElementById("nextStep2");
+  gateButton(step2Inputs, next2);
+
+  /* ----- Navigation: Step 1 → Step 2 ----- */
+  next1.addEventListener("click", () => {
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+  });
+
+  /* ----- Step 2 “Next” → show confirm-map step ----- */
+  next2.addEventListener("click", () => {
+    const address = addressInput.value.trim();
+    if (!address) return;
+
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address }, (results, status) => {
+      if (status !== "OK" || !results.length) {
+        alert("Couldn't locate that address. Please re-enter.");
+        return;
       }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = data.redirect_url;
-      } else {
-        alert('There was an error. Please try again.');
+
+      const { lat, lng } = results[0].geometry.location;
+
+      // Swap steps
+      document.getElementById("step2").style.display   = "none";
+      document.getElementById("step2Map").style.display = "block";
+
+      // First time → create map/marker
+      if (!map) {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: lat(), lng: lng() },
+          zoom: 18,
+        });
+        marker = new google.maps.Marker({
+          position: { lat: lat(), lng: lng() },
+          map,
+          draggable: true,
+        });
+        marker.addListener("dragend", updateLatLng);
       }
-    })
-    .catch(error => {
-      console.error('Error:', error);
+
+      // Every time → recenter
+      map.setCenter({ lat: lat(), lng: lng() });
+      marker.setPosition({ lat: lat(), lng: lng() });
+      google.maps.event.trigger(map, "resize");
+
+      updateLatLng();           // write hidden inputs
     });
   });
+
+  /* ----- Map-step “Next” → Machine Info ----- */
+  document.getElementById("nextStep2Map").addEventListener("click", () => {
+    document.getElementById("step2Map").style.display = "none";
+    document.getElementById("step3").style.display    = "block";
+  });
+
+  /* ----- Final submit ----- */
+  document.getElementById("requestMachineForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    fetch("{% url 'submitWebSiteLead' %}", {
+      method: "POST",
+      body: formData,
+      headers: { "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value }
+    })
+    .then(r => r.json())
+    .then(data => data.success
+          ? window.location.href = data.redirect_url
+          : alert("There was an error. Please try again."))
+    .catch(err => console.error("Error:", err));
+  });
+
+  function updateLatLng() {
+    document.getElementById("lat").value = marker.getPosition().lat();
+    document.getElementById("lng").value = marker.getPosition().lng();
+  }
+});
+
+/* Bring the Google suggestions in front of the modal */
+document.head.insertAdjacentHTML("beforeend",
+  "<style>.pac-container{z-index:2000!important}</style>");
 </script>

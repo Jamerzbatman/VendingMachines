@@ -5,6 +5,7 @@ class Lead(models.Model):
         ('website', 'Website'),
         ('ai', 'AI'),
         ('google', 'Google'),
+        ('brochures', 'Brochures'),
     ]
 
     first_name = models.CharField(max_length=100, blank=True)

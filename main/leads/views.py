@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.core.cache import cache
 from django.urls import reverse
+from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from .models import Lead, LeadPhone, LeadEmail
@@ -16,6 +17,44 @@ import uuid
 import json
 import time
 
+
+@csrf_exempt  # only if you're not using the CSRF token — otherwise omit this
+def submitBrochuresLead(request):
+    if request.method == 'POST':
+        try:
+            setup_time_raw = request.POST.get('setupTime')
+            setup_time = datetime.strptime(setup_time_raw, '%Y-%m-%dT%H:%M')
+
+            phone = request.POST.get('phone')
+            email = request.POST.get('email')
+            company_phone = request.POST.get('companyPhone')
+
+            lead = Lead.objects.create(
+                first_name=request.POST.get('firstName'),
+                last_name=request.POST.get('lastName'),
+                company_name=request.POST.get('companyName'),
+                address=request.POST.get('address'),
+                location = f"{request.POST.get('latitude')},{request.POST.get('longitude')}",
+                num_machines = request.POST.get('numMachines'),
+                source='brochures',
+                setup_time=setup_time,
+            )
+            if phone:
+                LeadPhone.objects.create(lead=lead, phone_number=phone)
+            if company_phone:
+                LeadPhone.objects.create(lead=lead, phone_number=company_phone)
+            if email:
+                LeadEmail.objects.create(lead=lead, email=email)
+
+            return render(request, "phones/thankYou.html")
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+
 @csrf_exempt  # only if you're not using the CSRF token — otherwise omit this
 def submitWebSiteLead(request):
     if request.method == 'POST':
@@ -24,6 +63,7 @@ def submitWebSiteLead(request):
             setup_time = datetime.strptime(setup_time_raw, '%Y-%m-%dT%H:%M')
 
             phone = request.POST.get('phone')
+            email = request.POST.get('email')
             company_phone = request.POST.get('companyPhone')
 
             lead = Lead.objects.create(
@@ -31,15 +71,17 @@ def submitWebSiteLead(request):
                 last_name=request.POST.get('lastName'),
                 company_name=request.POST.get('companyName'),
                 address=request.POST.get('address'),
-                num_machines=request.POST.get('numMachines'),
+                location = f"{request.POST.get('latitude')},{request.POST.get('longitude')}",
+                num_machines = request.POST.get('numMachines'),
+                source='website',
                 setup_time=setup_time,
-                source='website'
             )
-
             if phone:
                 LeadPhone.objects.create(lead=lead, phone_number=phone)
             if company_phone:
                 LeadPhone.objects.create(lead=lead, phone_number=company_phone)
+            if email:
+                LeadEmail.objects.create(lead=lead, email=email)
 
             return JsonResponse({'success': True, 'redirect_url': reverse('thankYou')})
 
