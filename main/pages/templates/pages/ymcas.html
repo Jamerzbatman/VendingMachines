@@ -1,0 +1,113 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}YMCAs – Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-success text-black text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Fuel Active Lifestyles at Your YMCA</h1>
+    <p class="lead mt-3">
+      From morning spin classes to after-school programs, our vending solutions keep members hydrated, energized, and coming back for more.
+    </p>
+    <button type="button" class="btn btn-light btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+      Request a YMCA Demo
+    </button>
+  </div>
+</section>
+
+<!-- Why YMCAs Choose Snack Ranger -->
+<section class="container my-5 section-dark text-white">
+  <h2 class="mb-3 text-center">Designed for Community Wellness</h2>
+  <ul class="list-unstyled fs-5 mx-auto" style="max-width:640px;">
+    <li class="d-flex mb-3">
+      <i class="bi bi-heart-pulse-fill text-info fs-3 me-3"></i>
+      Hydration stations with bottled & sparkling water, 100% juices, and electrolyte drinks
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-bicycle text-warning fs-3 me-3"></i>
+      Protein-packed snacks: bars, shakes, and lean protein picks to support recovery
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-people-fill text-primary fs-3 me-3"></i>
+      Youth-friendly options for swim lessons & after-school programs (allergy-aware, low-sugar)
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-bar-chart-line fs-3 me-3"></i>
+      Dashboard analytics: track popular items, peak times, and plan restocks efficiently
+    </li>
+  </ul>
+</section>
+
+<!-- Our YMCA-Ready Machines -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4 text-center">Our YMCA Machine Lineup</h2>
+  <div class="row gy-4">
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-info"><i class="bi bi-droplet-half me-2"></i>Hydration Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Spring & filtered water (still & sparkling)</li>
+        <li>Electrolyte & sports drinks</li>
+        <li>100% fruit juice & coconut water</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-info"><i class="bi bi-basket-fill me-2"></i>Healthy Snack Machine</h3>
+      <ul class="fs-6 ms-3">
+        <li>Whole-grain granola & protein bars</li>
+        <li>Baked chips & veggie crisps</li>
+        <li>Fruit & nut mixes (nut-free available)</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-info"><i class="bi bi-cup-hot me-2"></i>Recovery Coffee & Tea</h3>
+      <ul class="fs-6 ms-3">
+        <li>Fair-trade medium & dark roasts</li>
+        <li>Herbal & green teas</li>
+        <li>Protein-infused hot chocolate</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-info"><i class="bi bi-activity me-2"></i>Protein & Recovery Picks</h3>
+      <ul class="fs-6 ms-3">
+        <li>Yogurt parfait cups</li>
+        <li>Protein shakes & smoothies</li>
+        <li>Egg-white snack packs</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4">How It Works</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-calendar2-event fs-2 text-info"></i>
+      <h4 class="mt-2">Step 1</h4>
+      <p>Schedule a site visit to map high-traffic zones in your facility.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-tools fs-2 text-info"></i>
+      <h4 class="mt-2">Step 2</h4>
+      <p>We install & brand machines, integrate with your membership system, zero CAPEX.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-shield-lock fs-2 text-info"></i>
+      <h4 class="mt-2">Step 3</h4>
+      <p>Our dashboard tracks usage; we restock, service, and adjust menus as needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4">Enhance Member Experience Today</h2>
+  <p class="fs-5 mb-4">
+    Offer your members the convenience and nutrition they expect. Let's design a vending program tailored to your YMCA.
+  </p>
+  <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+    Request a YMCA Demo
+  </button>
+</section>
+{% endblock %}

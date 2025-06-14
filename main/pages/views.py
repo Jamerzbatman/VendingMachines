@@ -82,6 +82,40 @@ def officeBuildings(request):
     google_api_key = get_api_key("Google API Key")
     return render(request, "pages/officeBuildings.html", {"google_api_key": google_api_key})  # Show home page if not logged in
 
+def serviceLocations(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Redirect to dashboard if logged in
+    return render(request, "pages/serviceLocations.html")  # Show home page if not logged in
+
+def schools(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Redirect to dashboard if logged in
+    google_api_key = get_api_key("Google API Key")
+    return render(request, "pages/schools.html", {"google_api_key": google_api_key})  # Show home page if not logged in
+
+def boysGirlsClubs(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Redirect to dashboard if logged in
+    google_api_key = get_api_key("Google API Key")
+    return render(request, "pages/boysGirlsClubs.html", {"google_api_key": google_api_key})  # Show home page if not logged in
+
+def ymcas(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Redirect to dashboard if logged in
+    google_api_key = get_api_key("Google API Key")
+    return render(request, "pages/ymcas.html", {"google_api_key": google_api_key})  # Show home page if not logged in
+
+
+
+
+
+
+
+
+
+
+
+
 
 def Get_Short_log(user):
     current_time = timezone.now()

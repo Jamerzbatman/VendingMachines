@@ -1,0 +1,113 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Schools – Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-black text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Nutritious, Compliant Vending for California Schools</h1>
+    <p class="lead mt-3">
+      All our snacks and drinks meet USDA Smart Snacks &amp; CA nutrition standards—fueling students with healthy choices that teachers and parents trust.
+    </p>
+    <button type="button" class="btn btn-light btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+      Request a School Demo
+    </button>
+  </div>
+</section>
+
+<!-- Why Schools Choose Snack Ranger -->
+<section class="container my-5 section-dark text-white">
+  <h2 class="mb-3 text-center">Built for School Nutrition Standards</h2>
+  <ul class="list-unstyled fs-5 mx-auto" style="max-width:600px;">
+    <li class="d-flex mb-3">
+      <i class="bi bi-check-circle-fill text-success fs-3 me-3"></i>
+      Fully USDA Smart Snacks compliant menus
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-check-circle-fill text-success fs-3 me-3"></i>
+      California SB 1413–compliant beverages (100% juices, low-fat milk, water)
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-check-circle-fill text-success fs-3 me-3"></i>
+      Allergy-aware selections: nut-free, gluten-free, dairy-free
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-graph-up-arrow text-info fs-3 me-3"></i>
+      Real-time consumption analytics to optimize choices and minimize waste
+    </li>
+  </ul>
+</section>
+
+<!-- Our School-Friendly Machine Options -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4 text-center">Our School-Friendly Machines</h2>
+  <div class="row gy-4">
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-success"><i class="bi bi-apple me-2"></i>Fresh Produce Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Seasonal fruit cups &amp; whole apples</li>
+        <li>Veggie snack packs with hummus</li>
+        <li>Daily rotating market-fresh selections</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-success"><i class="bi bi-basket-fill me-2"></i>Whole-Grain Snacks</h3>
+      <ul class="fs-6 ms-3">
+        <li>Baked tortilla chips &amp; popcorn</li>
+        <li>100% whole-grain granola bars</li>
+        <li>Oatmeal cookie bites (low-sugar)</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-success"><i class="bi bi-droplet-half me-2"></i>Hydration Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Bottled water &amp; sparkling water</li>
+        <li>100% fruit juices (no added sugar)</li>
+        <li>Low-fat milk &amp; dairy alternatives</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-success"><i class="bi bi-heart-pulse me-2"></i>Lean Protein Picks</h3>
+      <ul class="fs-6 ms-3">
+        <li>Yogurt parfait cups (granola on side)</li>
+        <li>Cottage cheese snack packs</li>
+        <li>Roasted chickpea &amp; nut-free trail mixes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4">How It Works</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-calendar2-check fs-2 text-success"></i>
+      <h4 class="mt-2">Step 1</h4>
+      <p>Schedule a campus walkthrough to map optimal machine locations.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-wrench fs-2 text-success"></i>
+      <h4 class="mt-2">Step 2</h4>
+      <p>We install &amp; brand each unit with school-approved decals—zero capital outlay.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-bar-chart-line fs-2 text-success"></i>
+      <h4 class="mt-2">Step 3</h4>
+      <p>Our dashboard tracks compliance &amp; consumption; we restock and service on your schedule.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark text-center">
+  <h2 class="mb-4">Bring Healthy Vending to Your Campus</h2>
+  <p class="fs-5 mb-4">
+    Empower students with smart snack choices that meet all CA guidelines. Let’s design a program that works for your district.
+  </p>
+  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+    Request a School Demo
+  </button>
+</section>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Service Locations – Snack Ranger{% endblock %}
+
+{% block content %}
+<section class="container my-5 section-dark">
+  <div class="container">
+    <h2 class="text-center mb-4">Solutions for Your Business</h2>
+    <p class="text-center fs-5 mb-5">
+      From high-rise offices to luxury resorts, we customize every machine, menu selection, and restock schedule to match your audience’s tastes and rhythms.
+    </p>
+    <div class="row text-center mb-5">
+      <div class="col-md-6 col-lg-4 mb-4">
+        <i class="bi bi-building text-info" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">Office Buildings</h3>
+        <p class="fs-6 mb-3">
+          • On-floor grab-and-go: healthy snacks & artisan coffee stations<br>
+          • Corporate wellness integration: dietary & allergy filters<br>
+          • Smart usage analytics: minimize waste, maximize satisfaction
+        </p>
+        <a href="{% url 'officeBuildings' %}" class="btn btn-outline-info btn-sm">Explore Office Solutions</a>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <i class="bi bi-shop-window text-warning" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">Boutique &amp; Roadside Hotels</h3>
+        <p class="fs-6 mb-3">
+          • 24/7 mini-markets: local snacks & travel essentials<br>
+          • Guest-centric menus: regional specialties & grab-and-go kits<br>
+          • Seamless integration: no front-desk staff required
+        </p>
+        <a href="{% url 'boutiqueHotels' %}" class="btn btn-outline-warning btn-sm">Discover Hotel Packages</a>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <i class="bi bi-building-fill-check text-success" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">Large Hotels &amp; Resorts</h3>
+        <p class="fs-6 mb-3">
+          • Multi-unit fleets: coordinated restocks across property<br>
+          • Real-time monitoring: uptime & inventory dashboards<br>
+          • Concierge integration: custom branding & premium offerings
+        </p>
+        <a href="{% url 'largeHotels' %}" class="btn btn-outline-success btn-sm">View Resort Solutions</a>
+      </div>
+    </div>
+
+    <h2 class="text-center mb-4">Places We Serve</h2>
+    <p class="text-center fs-5 mb-5">
+      Our healthy-vending expertise extends to educational, recreational, and community environments designed to foster growth and wellness.
+    </p>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <i class="bi bi-mortarboard text-primary" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">Schools</h3>
+        <p class="fs-6 mb-3">
+          • USDA Smart Snack compliant menus<br>
+          • Custom portion controls for all age groups<br>
+          • Educational labeling to promote healthy choices
+        </p>
+        <a href="{% url 'schools' %}" class="btn btn-outline-primary btn-sm">Learn About School Programs</a>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="bi bi-people-fill text-secondary" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">Boys &amp; Girls Clubs</h3>
+        <p class="fs-6 mb-3">
+          • After-school snack stations with balanced nutrition<br>
+          • Allergy-friendly & dietary-specific options<br>
+          • Partnership opportunities for fundraising events
+        </p>
+        <a href="{% url 'boysGirlsClubs' %}" class="btn btn-outline-secondary btn-sm">See Club Offerings</a>
+      </div>
+      <div class="col-md-4 mb-4">
+        <i class="bi bi-activity text-success" style="font-size: 3rem;"></i>
+        <h3 class="mt-3">YMCAs</h3>
+        <p class="fs-6 mb-3">
+          • Fitness-fuel vending with hydration stations<br>
+          • Seasonal promotions (smoothies, recovery snacks)<br>
+          • Integrated member-only pricing & loyalty rewards
+        </p>
+        <a href="{% url 'ymcas' %}" class="btn btn-outline-success btn-sm">Explore YMCA Solutions</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

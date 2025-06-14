@@ -1,0 +1,113 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Boys & Girls Clubs – Snack Ranger{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-warning text-dark text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Healthy Vending for Boys &amp; Girls Clubs</h1>
+    <p class="lead mt-3">
+      Energizing youth with nutritious, allergy-safe snacks and drinks—perfect for after-school programs and weekend events.
+    </p>
+    <button type="button" class="btn btn-dark btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+      Request a Club Demo
+    </button>
+  </div>
+</section>
+
+<!-- Why Clubs Choose Snack Ranger -->
+<section class="container my-5 section-dark text-white">
+  <h2 class="mb-3 text-center">Tailored for Youth Development</h2>
+  <ul class="list-unstyled fs-5 mx-auto" style="max-width:650px;">
+    <li class="d-flex mb-3">
+      <i class="bi bi-emoji-laugh-fill text-info fs-3 me-3"></i>
+      Balanced, kid-friendly snack selections designed by nutrition experts
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-shield-fill-check text-success fs-3 me-3"></i>
+      Allergy-aware options: nut-free, gluten-free & dairy-free choices
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-hand-holding-heart text-warning fs-3 me-3"></i>
+      Fundraising integration: track sales & support your club’s events
+    </li>
+    <li class="d-flex mb-3">
+      <i class="bi bi-bar-chart-line fs-3 me-3"></i>
+      Real-time usage analytics for planning activities and reporting to stakeholders
+    </li>
+  </ul>
+</section>
+
+<!-- Our Club-Friendly Machines -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4 text-center">Our Club-Friendly Machine Lineup</h2>
+  <div class="row gy-4">
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-warning"><i class="bi bi-basket-fill me-2"></i>Snack Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Whole-grain granola & protein bars</li>
+        <li>Baked chips & veggie crisps</li>
+        <li>Low-sugar cookies & fruit snacks</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-warning"><i class="bi bi-droplet-half me-2"></i>Hydration Station</h3>
+      <ul class="fs-6 ms-3">
+        <li>Bottled water & sparkling water</li>
+        <li>100% fruit juices (no added sugar)</li>
+        <li>Electrolyte drinks for active kids</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-warning"><i class="bi bi-apple me-2"></i>Fresh Produce Packs</h3>
+      <ul class="fs-6 ms-3">
+        <li>Seasonal fruit cups & whole apples</li>
+        <li>Veggie snack packs with hummus</li>
+        <li>Daily rotating fresh options</li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <h3 class="text-warning"><i class="bi bi-heart-pulse me-2"></i>Recovery Picks</h3>
+      <ul class="fs-6 ms-3">
+        <li>Yogurt parfait cups</li>
+        <li>Protein shakes & smoothie pouches</li>
+        <li>Cottage cheese & nut-free trail mixes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4">How It Works</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-calendar2-event fs-2 text-warning"></i>
+      <h4 class="mt-2">Step 1</h4>
+      <p>Book a site visit to identify high-traffic areas in your club.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-tools fs-2 text-warning"></i>
+      <h4 class="mt-2">Step 2</h4>
+      <p>We install &amp; brand each machine, fully compliant with your program’s policies.</p>
+    </div>
+    <div class="col-md-4 mb-4">
+      <i class="bi bi-headset fs-2 text-warning"></i>
+      <h4 class="mt-2">Step 3</h4>
+      <p>Ongoing restocks & support, plus tailored menu updates to keep kids coming back.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="container my-5 section-dark text-white text-center">
+  <h2 class="mb-4">Empower Your Club with Healthy Vending</h2>
+  <p class="fs-5 mb-4">
+    Give your members safe, nutritious snack options that fuel fun and learning. Let’s set up a demo at your club.
+  </p>
+  <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#requestMachineModal">
+    Request a Club Demo
+  </button>
+</section>
+{% endblock %}
